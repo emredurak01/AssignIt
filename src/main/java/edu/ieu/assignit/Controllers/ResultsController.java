@@ -13,7 +13,6 @@ import java.util.Comparator;
 import java.util.ResourceBundle;
 
 public class ResultsController implements Initializable {
-
     @FXML
     private MFXTableView<Person> table;
 
@@ -23,18 +22,17 @@ public class ResultsController implements Initializable {
     }
 
     private void setupTable() {
-
         MFXTableColumn<Person> idColumn = new MFXTableColumn<>("ID", true, Comparator.comparing(Person::getId));
-        MFXTableColumn<Person> outputColumn = new MFXTableColumn<>("Output", true, Comparator.comparing(Person::getOutput));
-        MFXTableColumn<Person> resultColumn = new MFXTableColumn<>("Result", true, Comparator.comparing(Person::getResult));
-
-
+        MFXTableColumn<Person> outputColumn = new MFXTableColumn<>("Output", true,
+                Comparator.comparing(Person::getOutput));
+        MFXTableColumn<Person> resultColumn = new MFXTableColumn<>("Result", true,
+                Comparator.comparing(Person::getResult));
         idColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getId));
         outputColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getOutput));
         resultColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getResult));
         table.getTableColumns().addAll(idColumn, outputColumn, resultColumn);
 
-        //Dummy objects
+        // Dummy objects
         ObservableList<Person> people = FXCollections.observableArrayList();
         people.add(new Person("2020060201", "1,2,3", "Correct"));
         people.add(new Person("2020060202", "2,1,3", "Incorrect"));
@@ -46,7 +44,6 @@ public class ResultsController implements Initializable {
         people.add(new Person("2020060208", "1,2,3", "Correct"));
         people.add(new Person("2020060209", "2,3,1", "Incorrect"));
         people.add(new Person("2020060200", "1,2,3", "Correct"));
-
         table.setItems(people);
     }
 }

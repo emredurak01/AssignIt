@@ -1,12 +1,10 @@
 package edu.ieu.assignit.Controllers;
 
-//Dummy class for table
+// Dummy class for table
 public class Person {
-
-    private String id;
-    private String output;
-    private String result;
-
+    private final String id;
+    private final String output;
+    private final String result;
 
     public Person(String id, String output, String result) {
         this.id = id;
@@ -25,5 +23,4 @@ public class Person {
     public String getResult() {
         return result;
     }
-
 }

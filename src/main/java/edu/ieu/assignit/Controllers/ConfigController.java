@@ -15,14 +15,14 @@ public class ConfigController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         runButton.setOnAction(actionEvent -> {
             try {
-                Application.changeScene("fxml/results.fxml", 600, 400);
+                Application.changeScene("fxml/results.fxml",
+                                        600,
+                                        400);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
-
     }
 }

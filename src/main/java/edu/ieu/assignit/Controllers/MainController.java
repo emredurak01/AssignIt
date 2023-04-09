@@ -20,13 +20,13 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         createNewButton.setOnAction(actionEvent -> {
             try {
-                Application.changeScene("fxml/config.fxml", 275, 500);
+                Application.changeScene("fxml/config.fxml",
+                        275,
+                        500);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
         });
         exitButton.setOnAction(actionEvent -> Platform.exit());
     }
-
-
 }
