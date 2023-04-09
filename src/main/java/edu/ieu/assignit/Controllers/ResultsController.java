@@ -8,9 +8,12 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
+
+import edu.ieu.assignit.CCompiler;
 
 public class ResultsController implements Initializable {
     @FXML
@@ -18,6 +21,15 @@ public class ResultsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        String[] list = (String[]) table.getScene().getUserData();
+        String[] args = null;
+        System.arraycopy(args, 0, list, 1, list.length);
+        try {
+            
+			new CCompiler().compile(list[0], args);
+		} catch (IOException | InterruptedException e) {
+			e.printStackTrace();
+		}
         setupTable();
     }
 

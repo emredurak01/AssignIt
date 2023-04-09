@@ -19,14 +19,15 @@ public class MainController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         createNewButton.setOnAction(actionEvent -> {
-            try {
-                Application.changeScene("fxml/config.fxml",
-                        275,
-                        500);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+                try {
+                    Application.changeScene("fxml/config.fxml",
+                                            275,
+                                            500,
+                                            null);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
         exitButton.setOnAction(actionEvent -> Platform.exit());
     }
 }
