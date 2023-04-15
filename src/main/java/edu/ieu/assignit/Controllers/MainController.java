@@ -21,8 +21,8 @@ public class MainController implements Initializable {
         createNewButton.setOnAction(actionEvent -> {
                 try {
                     Application.changeScene("fxml/config.fxml",
-                                            275,
-                                            500,
+                                            300,
+                                            550,
                                             null);
                 } catch (IOException e) {
                     throw new RuntimeException(e);

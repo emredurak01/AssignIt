@@ -27,7 +27,7 @@ public class ConfigController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         String[] list = new String[4];
-        
+
         runButton.setOnAction(actionEvent -> {
             try {
                 list[0] = path.getText();

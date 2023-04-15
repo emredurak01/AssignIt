@@ -39,8 +39,8 @@ public class Application extends javafx.application.Application {
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
         primaryStage.setTitle("AssignIt");
-        primaryStage.setWidth(220);
-        primaryStage.setHeight(200);
+        primaryStage.setWidth(250);
+        primaryStage.setHeight(250);
         primaryStage.show();
     }
 }

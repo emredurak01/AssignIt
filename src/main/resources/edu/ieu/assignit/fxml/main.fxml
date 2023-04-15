@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="201.0" prefWidth="219.0" spacing="20.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ieu.assignit.Controllers.MainController">
+<VBox alignment="CENTER" prefHeight="201.0" prefWidth="219.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ieu.assignit.Controllers.MainController">
   <padding>
     <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
   </padding>
@@ -16,7 +16,8 @@
             <Font size="25.0" />
          </font>
       </Label>
-       <MFXButton id="custom" fx:id="createNewButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Create new project" />
+       <MFXButton id="custom" fx:id="createNewButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Open project" />
+      <MFXButton id="custom" fx:id="helpButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Help" />
       <MFXButton id="custom" fx:id="exitButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Exit" />
    </children>
 </VBox>
