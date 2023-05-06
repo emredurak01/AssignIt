@@ -14,6 +14,8 @@ public class MainController implements Initializable {
     @FXML
     private MFXButton createNewButton;
     @FXML
+    private MFXButton helpButton;
+    @FXML
     private MFXButton exitButton;
 
     @Override

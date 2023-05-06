@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.Objects;
 
 public class Application extends javafx.application.Application {
-    private static Stage primaryStage;
+    public static Stage primaryStage;
 
     public static void changeScene(String fxml, int width, int height, Object value) throws IOException {
         Parent newScene = FXMLLoader.load(Objects.requireNonNull(Application.class.getResource(fxml)));

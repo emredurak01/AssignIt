@@ -1,8 +1,10 @@
 package edu.ieu.assignit.Controllers;
 
+import edu.ieu.assignit.CCompiler;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -13,32 +15,30 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 
-import edu.ieu.assignit.CCompiler;
-
 public class ResultsController implements Initializable {
     @FXML
     private MFXTableView<Person> table;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String[] list = (String[]) table.getScene().getUserData();
-        String[] args = null;
-        System.arraycopy(args, 0, list, 1, list.length);
-        try {
-            
-			new CCompiler().compile(list[0], args);
-		} catch (IOException | InterruptedException e) {
-			e.printStackTrace();
-		}
-        setupTable();
+        Platform.runLater(() -> {
+            //FIXME: list is null
+            String[] list = (String[]) table.getScene().getUserData();
+            String[] args = null;
+            System.arraycopy(args, 0, list, 1, list.length);
+            try {
+                new CCompiler().compile(list[0], args);
+            } catch (IOException | InterruptedException e) {
+                e.printStackTrace();
+            }
+            setupTable();
+        });
     }
 
     private void setupTable() {
         MFXTableColumn<Person> idColumn = new MFXTableColumn<>("ID", true, Comparator.comparing(Person::getId));
-        MFXTableColumn<Person> outputColumn = new MFXTableColumn<>("Output", true,
-                Comparator.comparing(Person::getOutput));
-        MFXTableColumn<Person> resultColumn = new MFXTableColumn<>("Result", true,
-                Comparator.comparing(Person::getResult));
+        MFXTableColumn<Person> outputColumn = new MFXTableColumn<>("Output", true, Comparator.comparing(Person::getOutput));
+        MFXTableColumn<Person> resultColumn = new MFXTableColumn<>("Result", true, Comparator.comparing(Person::getResult));
         idColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getId));
         outputColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getOutput));
         resultColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getResult));
