@@ -1,4 +1,4 @@
-module com.example.assignit {
+module edu.ieu.assignit {
     requires javafx.controls;
     requires javafx.fxml;
     requires MaterialFX;

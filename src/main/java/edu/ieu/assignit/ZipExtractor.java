@@ -9,12 +9,17 @@ import java.util.zip.ZipInputStream;
 
 public class ZipExtractor {
 
-    public static void extract(String directoryPath) {
+    private boolean zipExists = false;
+
+    public boolean getZipExists() {
+        return zipExists;
+    }
+
+    public void extract(String directoryPath) {
 
         File directory = new File(directoryPath);
         File[] zipFiles = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".zip"));
         byte[] buffer = new byte[1024];
-
         if (zipFiles != null) {
             for (File zipFile : zipFiles) {
                 try {
@@ -42,13 +47,14 @@ public class ZipExtractor {
                     }
                     zipInputStream.closeEntry();
                     zipInputStream.close();
+                    this.zipExists = true;
 
                 } catch (IOException e) {
                     e.getMessage();
                 }
             }
         } else {
-            System.out.println("No zip");
+            this.zipExists = false;
         }
 
     }

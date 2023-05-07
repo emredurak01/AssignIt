@@ -1,6 +1,8 @@
 package edu.ieu.assignit.Controllers;
 
+import edu.ieu.assignit.Application;
 import edu.ieu.assignit.CCompiler;
+import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
@@ -14,12 +16,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
-
 import edu.ieu.assignit.Config;
 
 public class ResultsController implements Initializable {
     @FXML
     private MFXTableView<Person> table;
+    @FXML
+    private MFXButton backButton;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -29,6 +32,16 @@ public class ResultsController implements Initializable {
             e.printStackTrace();
         }
         setupTable();
+
+        backButton.setOnAction(actionEvent -> {
+            try {
+                Application.changeScene("fxml/config.fxml",
+                        300,
+                        550);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
     }
 
     private void setupTable() {

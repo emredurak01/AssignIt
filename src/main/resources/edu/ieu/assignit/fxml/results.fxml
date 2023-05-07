@@ -1,11 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import io.github.palexdev.materialfx.controls.MFXButton?>
 <?import io.github.palexdev.materialfx.controls.MFXTableView?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ieu.assignit.Controllers.ResultsController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/19" xmlns:fx="http://javafx.com/fxml/1" fx:controller="edu.ieu.assignit.Controllers.ResultsController">
    <children>
-      <MFXTableView fx:id="table" layoutX="-2.0" layoutY="-10.0" prefHeight="410.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <VBox prefHeight="400.0" prefWidth="600.0">
+         <children>
+            <HBox prefHeight="40.0" prefWidth="600.0">
+               <children>
+                  <MFXButton id="custom" fx:id="backButton" buttonType="RAISED" prefHeight="30.0" prefWidth="65.0" styleClass="custom-button" stylesheets="@../css/buttons.css" text="&lt;" />
+                  <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Results" textAlignment="CENTER" wrappingWidth="56.91888427734375">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="200.0" top="2.0" />
+                     </HBox.margin>
+                  </Text>
+               </children>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </HBox>
+            <MFXTableView fx:id="table" prefHeight="400.0" prefWidth="600.0" />
+         </children>
+      </VBox>
    </children>
 </AnchorPane>
