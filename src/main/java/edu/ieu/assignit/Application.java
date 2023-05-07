@@ -23,11 +23,6 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        try {
-			System.out.println(new CCompiler().compile("gcc", "main.c"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
         primaryStage = stage;
         FXMLLoader loader = new FXMLLoader(Application.class.getResource("fxml/main.fxml"));
         loader.setControllerFactory(c -> new MainController());

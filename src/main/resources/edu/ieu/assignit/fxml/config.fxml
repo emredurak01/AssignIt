@@ -19,7 +19,7 @@
       </MFXComboBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="210.0">
          <children>
-            <MFXTextField fx:id="assignmentPath" alignment="CENTER" floatingText="Assignment Path" floatingTextGap="0.0" prefHeight="46.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="home/emre/assignment">
+            <MFXTextField fx:id="assignmentPath" alignment="CENTER" floatingText="Assignment Path" floatingTextGap="0.0" prefHeight="46.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -37,10 +37,9 @@
             <Insets right="-33.0" />
          </padding>
       </HBox>
-        <MFXTextField fx:id="compilerPath" floatingText="Compiler Path" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="usr/bin/gcc" />
-      <MFXTextField floatingText="Source Code" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="main.c" />
-      <MFXTextField fx:id="args" floatingText="Arguments" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="-o main" />
-      <MFXTextField fx:id="expected" floatingText="Expected outcome" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="1,2,3" />
+        <MFXTextField fx:id="compilerPath" floatingText="Compiler Path" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
+      <MFXTextField fx:id="args" floatingText="Arguments" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
+      <MFXTextField fx:id="expected" floatingText="Expected outcome" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
         <MFXButton id="custom" fx:id="saveButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Save Configuration" />
       <MFXButton id="custom" fx:id="runButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Run" />
     </children>

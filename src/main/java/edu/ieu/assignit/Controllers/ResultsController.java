@@ -12,11 +12,13 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 import edu.ieu.assignit.Config;
+import edu.ieu.assignit.Result;
 
 public class ResultsController implements Initializable {
     @FXML
@@ -27,7 +29,19 @@ public class ResultsController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
-            new CCompiler().compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
+            File[] submissions = new File(Config.getInstance().ASSIGNMENT_PATH).listFiles();
+            for (File file : submissions) {
+                if (!file.isFile()) { // if it is directory
+                    System.out.println(file.getName() + " is working directory for compiling");
+                    Result result = new CCompiler(file).compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
+                    System.out.println(Config.getInstance().COMPILER_PATH + " " + Config.getInstance().ARGS);
+                    System.out.println("status: " + result.getStatus());
+                    System.out.println("output: " + result.getOutput());
+                    System.out.println("error: " + result.getError());
+                    System.out.println("expected: " + Config.getInstance().EXPECTED);
+                    // check results
+                }
+            }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }

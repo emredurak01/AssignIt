@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import edu.ieu.assignit.Config;
+import edu.ieu.assignit.CCompiler;
 import static edu.ieu.assignit.Application.primaryStage;
 
 public class ConfigController implements Initializable {
@@ -51,7 +52,9 @@ public class ConfigController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        compilerPath.setText(CCompiler.COMPILER_PATH);
+        assignmentPath.setText("cSampleAssignment");
+        args.setText(CCompiler.ARGS);
         runButton.setOnAction(actionEvent -> {
             try {
                 Config.getInstance().COMPILER_PATH = compilerPath.getText();
