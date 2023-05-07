@@ -15,24 +15,20 @@ import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
 
+import edu.ieu.assignit.Config;
+
 public class ResultsController implements Initializable {
     @FXML
     private MFXTableView<Person> table;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Platform.runLater(() -> {
-            //FIXME: list is null
-            String[] list = (String[]) table.getScene().getUserData();
-            String[] args = null;
-            System.arraycopy(args, 0, list, 1, list.length);
-            try {
-                new CCompiler().compile(list[0], args);
-            } catch (IOException | InterruptedException e) {
-                e.printStackTrace();
-            }
-            setupTable();
-        });
+        try {
+            new CCompiler().compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
+        } catch (IOException | InterruptedException e) {
+            e.printStackTrace();
+        }
+        setupTable();
     }
 
     private void setupTable() {

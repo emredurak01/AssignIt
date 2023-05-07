@@ -24,8 +24,7 @@ public class MainController implements Initializable {
                 try {
                     Application.changeScene("fxml/config.fxml",
                                             300,
-                                            550,
-                                            null);
+                                            550);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

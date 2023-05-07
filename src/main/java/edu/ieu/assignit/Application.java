@@ -14,9 +14,8 @@ import java.util.Objects;
 public class Application extends javafx.application.Application {
     public static Stage primaryStage;
 
-    public static void changeScene(String fxml, int width, int height, Object value) throws IOException {
+    public static void changeScene(String fxml, int width, int height) throws IOException {
         Parent newScene = FXMLLoader.load(Objects.requireNonNull(Application.class.getResource(fxml)));
-        newScene.setUserData(value);
         primaryStage.setWidth(width);
         primaryStage.setHeight(height);
         primaryStage.getScene().setRoot(newScene);
@@ -24,9 +23,8 @@ public class Application extends javafx.application.Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        String[] args = {"main.c"};
         try {
-			System.out.println(new CCompiler().compile("gcc", args));
+			System.out.println(new CCompiler().compile("gcc", "main.c"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

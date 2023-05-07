@@ -13,6 +13,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import edu.ieu.assignit.Config;
+
 import static edu.ieu.assignit.Application.primaryStage;
 
 public class ConfigController implements Initializable {
@@ -32,21 +34,19 @@ public class ConfigController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        String[] list = new String[4];
 
         runButton.setOnAction(actionEvent -> {
             try {
-                list[0] = compilerPath.getText();
-                list[1] = assignmentPath.getText();
-                list[2] = args.getText();
-                list[3] = expected.getText();
-
-                ZipExtractor.extract(list[1]);
+                Config.getInstance().COMPILER_PATH = compilerPath.getText();
+                Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
+                Config.getInstance().ARGS = args.getText();
+                Config.getInstance().EXPECTED = expected.getText();
+                ZipExtractor.extract(Config.getInstance().ASSIGNMENT_PATH);
 
                 //TODO: Change scene only if assignment path is valid
                 Application.changeScene("fxml/results.fxml",
                         600,
-                        400, list);
+                        400);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
