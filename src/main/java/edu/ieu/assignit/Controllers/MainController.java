@@ -1,6 +1,7 @@
 package edu.ieu.assignit.Controllers;
 
 import edu.ieu.assignit.Application;
+import edu.ieu.assignit.Database;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -20,6 +21,8 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        Database database= new Database();
+
         createNewButton.setOnAction(actionEvent -> {
             try {
                 Application.changeScene("fxml/config.fxml", 300, 550);

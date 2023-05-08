@@ -1,9 +1,13 @@
+/**
+ *
+ */
 module edu.ieu.assignit {
     requires javafx.controls;
     requires javafx.fxml;
     requires MaterialFX;
-            
-                            
+    requires java.sql;
+
+
     opens edu.ieu.assignit to javafx.fxml;
     exports edu.ieu.assignit;
     exports edu.ieu.assignit.Controllers;
