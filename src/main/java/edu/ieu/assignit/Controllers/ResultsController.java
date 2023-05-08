@@ -25,7 +25,7 @@ public class ResultsController implements Initializable {
     private MFXTableView<Person> table;
     @FXML
     private MFXButton backButton;
-
+    private ObservableList<Person> people = FXCollections.observableArrayList();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -40,6 +40,17 @@ public class ResultsController implements Initializable {
                     System.out.println("error: " + result.getError());
                     System.out.println("expected: " + Config.getInstance().EXPECTED);
                     // check results
+                    String resultString;
+                    if (result.getOutput() == null){
+                        resultString = "Incorrect";
+                    }else if(result.getOutput().equals(Config.getInstance().EXPECTED)){
+                        resultString = "Correct";
+
+                    }else {
+                        resultString = "Incorrect";
+                    }
+                    Person person = new Person(file.getName(), result.getOutput(), resultString);
+                    people.add(person);
                 }
             }
         } catch (IOException | InterruptedException e) {
@@ -66,19 +77,7 @@ public class ResultsController implements Initializable {
         outputColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getOutput));
         resultColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getResult));
         table.getTableColumns().addAll(idColumn, outputColumn, resultColumn);
-
-        // Dummy objects
-        ObservableList<Person> people = FXCollections.observableArrayList();
-        people.add(new Person("2020060201", "1,2,3", "Correct"));
-        people.add(new Person("2020060202", "2,1,3", "Incorrect"));
-        people.add(new Person("2020060203", "2,1,3", "Incorrect"));
-        people.add(new Person("2020060204", "1,2,3", "Correct"));
-        people.add(new Person("2020060205", "1,2,3", "Correct"));
-        people.add(new Person("2020060206", "1,2,3", "Correct"));
-        people.add(new Person("2020060207", "3,2,1", "Incorrect"));
-        people.add(new Person("2020060208", "1,2,3", "Correct"));
-        people.add(new Person("2020060209", "2,3,1", "Incorrect"));
-        people.add(new Person("2020060200", "1,2,3", "Correct"));
         table.setItems(people);
     }
+
 }
