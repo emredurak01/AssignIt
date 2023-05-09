@@ -50,6 +50,7 @@ public class ResultsController implements Initializable {
                     System.out.println("error: " + result.getError());
                     System.out.println("expected: " + Config.getInstance().EXPECTED);
                     // check results
+                    String isError;
                     String resultString;
                     if (result.getOutput() == null){
                         resultString = "Incorrect";
@@ -59,7 +60,12 @@ public class ResultsController implements Initializable {
                     }else {
                         resultString = "Incorrect";
                     }
-                    Submission submission = new Submission(file.getName(), result.getOutput(), resultString, result.getStatus(), result.getError(),Config.getInstance().EXPECTED);
+                    if (result.getError() == null){
+                        isError = "None";
+                    }else {
+                        isError = result.getError();
+                    }
+                    Submission submission = new Submission(file.getName(), result.getOutput(), resultString, result.getStatus(), isError,Config.getInstance().EXPECTED);
                     people.add(submission);
                 }
             }
