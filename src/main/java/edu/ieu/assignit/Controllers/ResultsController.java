@@ -6,7 +6,6 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,16 +20,15 @@ import edu.ieu.assignit.Config;
 import edu.ieu.assignit.Result;
 
 import edu.ieu.assignit.Compiler;
-import edu.ieu.assignit.CCompiler;
 import edu.ieu.assignit.PythonCompiler;
 import edu.ieu.assignit.LispCompiler;
 
 public class ResultsController implements Initializable {
     @FXML
-    private MFXTableView<Person> table;
+    private MFXTableView<Submission> table;
     @FXML
     private MFXButton backButton;
-    private ObservableList<Person> people = FXCollections.observableArrayList();
+    private ObservableList<Submission> people = FXCollections.observableArrayList();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -61,8 +59,8 @@ public class ResultsController implements Initializable {
                     }else {
                         resultString = "Incorrect";
                     }
-                    Person person = new Person(file.getName(), result.getOutput(), resultString);
-                    people.add(person);
+                    Submission submission = new Submission(file.getName(), result.getOutput(), resultString, result.getStatus(), result.getError(),Config.getInstance().EXPECTED);
+                    people.add(submission);
                 }
             }
         } catch (Exception e) {
@@ -82,15 +80,20 @@ public class ResultsController implements Initializable {
         });
     }
 
-    // TODO: Please someone add columns for error and status. In addition, there should be a label indicating the expected value. Thank you very much.
     private void setupTable() {
-        MFXTableColumn<Person> idColumn = new MFXTableColumn<>("ID", true, Comparator.comparing(Person::getId));
-        MFXTableColumn<Person> outputColumn = new MFXTableColumn<>("Output", true, Comparator.comparing(Person::getOutput));
-        MFXTableColumn<Person> resultColumn = new MFXTableColumn<>("Result", true, Comparator.comparing(Person::getResult));
-        idColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getId));
-        outputColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getOutput));
-        resultColumn.setRowCellFactory(person -> new MFXTableRowCell<>(Person::getResult));
-        table.getTableColumns().addAll(idColumn, outputColumn, resultColumn);
+        MFXTableColumn<Submission> idColumn = new MFXTableColumn<>("ID", true, Comparator.comparing(Submission::getId));
+        MFXTableColumn<Submission> outputColumn = new MFXTableColumn<>("Output", true, Comparator.comparing(Submission::getOutput));
+        MFXTableColumn<Submission> expectedValueColumn =  new MFXTableColumn<>("Expected Value",true,Comparator.comparing(Submission::getExpectedValue));
+        MFXTableColumn<Submission> resultColumn = new MFXTableColumn<>("Result", true, Comparator.comparing(Submission::getResult));
+        MFXTableColumn<Submission> statusColumn =  new MFXTableColumn<>("Status",true, Comparator.comparing(Submission::getStatus));
+        MFXTableColumn<Submission> errorColumn = new MFXTableColumn<>("Error",true,Comparator.comparing(Submission::getError));
+        idColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getId));
+        outputColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getOutput));
+        resultColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getResult));
+        statusColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getStatus));
+        errorColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getError));
+        expectedValueColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getExpectedValue));
+        table.getTableColumns().addAll(idColumn, outputColumn, resultColumn, statusColumn, errorColumn, expectedValueColumn);
         table.setItems(people);
     }
 
