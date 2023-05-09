@@ -102,7 +102,10 @@ public class ConfigController implements Initializable {
                 // .assignit is our assignment config file extension. We could also use .db.
                 try {
                     if (!selectedDirectoryPath.isEmpty()) {
-                        Database.getInstance().createAssignmentConfig(selectedDirectoryPath + "/config.assignit");
+                            Database.getInstance().createAssignmentConfig(selectedDirectoryPath + "/config.assignit");
+                            Database.getInstance().addConfig(compilerPath.getText(), args.getText(), expected.getText(), runField.getText(), Config.getInstance().SELECTED_LANGUAGE.toString());
+                            Database.getInstance().disconnect();
+                        
                          createAlert("Configuration saved successfully.", "Success");
                     }
                 } catch (SQLException e) {
