@@ -3,11 +3,9 @@ package edu.ieu.assignit;
 import java.io.File;
 import java.sql.*;
 
-import edu.ieu.assignit.Controllers.ConfigController;
-
 public class Database {
     private static Database instance;
-    Connection connection;
+    static Connection connection;
     private String path;
 
     // singleton
@@ -21,38 +19,38 @@ public class Database {
         return instance;
     }
 
-    // disconnect if connection is not null, connect to the path, create assignment config by executing SQL
+    // connect to the path, create assignment config by executing SQL, then disconnect
     public void createAssignmentConfig(String path) throws SQLException {
         this.path = path;
+        File file = new File(path);
+        boolean noSavedConfig = !file.exists();
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + path);
+
+            if (noSavedConfig) {
                 Statement stat = connection.createStatement();
-                stat.executeUpdate("CREATE TABLE if not exists config_table (ID INTEGER PRIMARY KEY AUTOINCREMENT,COMPILER_PATH varchar(255), ARGS varchar(255),EXPECTED varchar(255),RUN_COMMAND varchar(255),SELECTED_LANGUAGE varchar(255));");
-                stat.close();
-                
+                stat.executeUpdate(" CREATE TABLE config_table (ID int,COMPILER_PATH varchar(255),ASSIGNMENT_PATH varchar(255),ARGS varchar(255),EXPECTED varchar(255),RUN_COMMAND varchar(255),SELECTED_LANGUAGE varchar(255));");
+            }
+            connection.close();
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
-            ConfigController.createAlert(e.getMessage(), "Error");
         }
     }
 
-    public void addConfig(String compilerPath, String args, String expected, String runCommand, String selectedLanguage) throws SQLException {
-        String sql = "INSERT INTO config_table (COMPILER_PATH, ARGS, EXPECTED, RUN_COMMAND, SELECTED_LANGUAGE) VALUES (?, ?, ?, ?, ?)";
-        PreparedStatement ps = connection.prepareStatement(sql);
-        // id will always be 1,
-        // since there will be only one config in every assignment.
-        // So, is id field necessary for this simple task?
-        ps.setString(1, compilerPath);
-        ps.setString(2, args);
-        ps.setString(3, expected);
-        ps.setString(4, runCommand);
-        ps.setString(5, selectedLanguage);
-        ps.executeUpdate();
-        ps.close();
-    }
+    public static void insertConfig(final Config config) throws SQLException{
+        final PreparedStatement statement = connection.prepareStatement("insert into config_table " +
+                "(COMPILER_PATH, " +
+                "ASSIGNMENT_PATH, " +
+                "ARGS, " +
+                "EXPECTED) " +
+                "values (?, ?, ?, ?) ");
+        statement.setString(1,config.COMPILER_PATH);
+        statement.setString(2,config.ASSIGNMENT_PATH);
+        statement.setString(3,config.ARGS);
+        statement.setString(4,config.EXPECTED);
 
-    public void disconnect() throws SQLException {
-        connection.close();
+        statement.executeUpdate();
+
     }
 }
