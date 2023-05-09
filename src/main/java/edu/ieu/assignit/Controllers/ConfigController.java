@@ -1,27 +1,33 @@
 package edu.ieu.assignit.Controllers;
 
-import edu.ieu.assignit.Application;
-import edu.ieu.assignit.ZipExtractor;
+import edu.ieu.assignit.*;
 import io.github.palexdev.materialfx.controls.MFXButton;
+import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
 import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
 import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
 import io.github.palexdev.materialfx.enums.ScrimPriority;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Modality;
+
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import edu.ieu.assignit.Config;
-import edu.ieu.assignit.CCompiler;
+
 import static edu.ieu.assignit.Application.primaryStage;
 
 public class ConfigController implements Initializable {
 
+    @FXML
+    private MFXComboBox<String> configComboBox;
     @FXML
     private MFXTextField assignmentPath;
     @FXML
@@ -30,6 +36,8 @@ public class ConfigController implements Initializable {
     private MFXTextField compilerPath;
     @FXML
     private MFXTextField args;
+    @FXML
+    private MFXTextField runField;
     @FXML
     private MFXTextField expected;
     @FXML
@@ -52,9 +60,7 @@ public class ConfigController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        compilerPath.setText(CCompiler.COMPILER_PATH);
-        assignmentPath.setText("cSampleAssignment");
-        args.setText(CCompiler.ARGS);
+
         runButton.setOnAction(actionEvent -> {
             try {
                 Config.getInstance().COMPILER_PATH = compilerPath.getText();
@@ -88,6 +94,42 @@ public class ConfigController implements Initializable {
         });
 
         saveButton.setOnAction(actionEvent -> createAlert("Configuration saved successfully.", "Success"));
+
+        ObservableList<String> comboList = FXCollections.observableArrayList();
+        comboList.addAll("Default C Config", "Default Python Config", "Default Lisp Config");
+        configComboBox.setItems(comboList);
+
+        configComboBox.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                if (configComboBox.getValue() == null) {
+
+                } else if (configComboBox.getValue().equals("Default C Config")) {
+                    assignmentPath.setText("");
+                    compilerPath.setText(CCompiler.COMPILER_PATH);
+                    args.setText(CCompiler.ARGS);
+                    runField.setVisible(true);
+                    runField.setManaged(true);
+                    runField.setText(CCompiler.RUN_COMMAND);
+                    expected.setText("");
+                } else if (configComboBox.getValue().equals("Default Python Config")) {
+                    assignmentPath.setText("");
+                    compilerPath.setText(PythonCompiler.COMPILER_PATH);
+                    runField.setVisible(false);
+                    runField.setManaged(false);
+                    args.setText(PythonCompiler.ARGS);
+                    expected.setText("");
+                } else if (configComboBox.getValue().equals("Default Lisp Config")) {
+                    assignmentPath.setText("");
+                    compilerPath.setText(LispCompiler.COMPILER_PATH);
+                    runField.setVisible(false);
+                    runField.setManaged(false);
+                    args.setText(LispCompiler.ARGS);
+                    expected.setText("");
+                }
+            }
+        });
+
 
     }
 }

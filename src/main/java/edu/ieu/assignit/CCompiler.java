@@ -8,6 +8,7 @@ import java.io.IOException;
 public class CCompiler extends Compiler {
     public static final String COMPILER_PATH = "gcc";
     public static final String ARGS = "main.c";
+    public static final String RUN_COMMAND = "./main";
     
     public CCompiler(File workingDirectory) {
         super(workingDirectory);
