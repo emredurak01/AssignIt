@@ -100,28 +100,12 @@ public class ConfigController implements Initializable {
         saveButton.setOnAction(actionEvent -> {
                 // export config to the assignment path only if there is not a .db file inside
                 // .assignit is our assignment config file extension. We could also use .db.
-
-
-
-            /**
-            Config.getInstance().COMPILER_PATH = compilerPath.getText();
-            Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
-            Config.getInstance().ARGS = args.getText();
-            Config.getInstance().EXPECTED = expected.getText();
-            try {
-                Database.insertConfig(Config.getInstance());
-
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-
-            createAlert("Configuration saved successfully.", "Success");**/
-
-        try {
-
+                try {
                     if (!selectedDirectoryPath.isEmpty()) {
-                        Database.getInstance().createAssignmentConfig(selectedDirectoryPath + "/config.assignit");
-
+                            Database.getInstance().createAssignmentConfig(selectedDirectoryPath + "/config.assignit");
+                            Database.getInstance().addConfig(compilerPath.getText(), args.getText(), expected.getText(), runField.getText(), Config.getInstance().SELECTED_LANGUAGE.toString());
+                            Database.getInstance().disconnect();
+                        
                          createAlert("Configuration saved successfully.", "Success");
                     }
                 } catch (SQLException e) {
