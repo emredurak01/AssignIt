@@ -21,7 +21,6 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Database database= new Database();
 
         createNewButton.setOnAction(actionEvent -> {
             try {

@@ -6,6 +6,7 @@ module edu.ieu.assignit {
     requires javafx.fxml;
     requires MaterialFX;
     requires java.sql;
+    requires org.xerial.sqlitejdbc;
 
 
     opens edu.ieu.assignit to javafx.fxml;

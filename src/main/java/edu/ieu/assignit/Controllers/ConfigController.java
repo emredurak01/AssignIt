@@ -20,6 +20,8 @@ import javafx.stage.Modality;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import static edu.ieu.assignit.Application.primaryStage;
@@ -61,6 +63,7 @@ public class ConfigController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+
         runButton.setOnAction(actionEvent -> {
             try {
                 Config.getInstance().COMPILER_PATH = compilerPath.getText();
@@ -93,7 +96,23 @@ public class ConfigController implements Initializable {
 
         });
 
-        saveButton.setOnAction(actionEvent -> createAlert("Configuration saved successfully.", "Success"));
+        saveButton.setOnAction(actionEvent ->{
+
+            Database db = new Database();
+
+                    Config.getInstance().COMPILER_PATH = compilerPath.getText();
+                    Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
+                    Config.getInstance().ARGS = args.getText();
+                    Config.getInstance().EXPECTED = expected.getText();
+                    try {
+                        db.insertConfig(Config.getInstance());
+
+                    } catch (SQLException throwables) {
+                        throwables.printStackTrace();
+                    }
+
+                    createAlert("Configuration saved successfully.", "Success");}
+                );
 
         ObservableList<String> comboList = FXCollections.observableArrayList();
         comboList.addAll("Default C Config", "Default Python Config", "Default Lisp Config");
