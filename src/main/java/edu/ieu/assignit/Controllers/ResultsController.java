@@ -20,6 +20,11 @@ import java.util.ResourceBundle;
 import edu.ieu.assignit.Config;
 import edu.ieu.assignit.Result;
 
+import edu.ieu.assignit.Compiler;
+import edu.ieu.assignit.CCompiler;
+import edu.ieu.assignit.PythonCompiler;
+import edu.ieu.assignit.LispCompiler;
+
 public class ResultsController implements Initializable {
     @FXML
     private MFXTableView<Person> table;
@@ -33,7 +38,14 @@ public class ResultsController implements Initializable {
             for (File file : submissions) {
                 if (!file.isFile()) { // if it is directory
                     System.out.println(file.getName() + " is working directory for compiling");
-                    Result result = new CCompiler(file).compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
+                    Compiler compiler;
+                    switch (Config.getInstance().SELECTED_LANGUAGE) {
+                    case C -> compiler = new CCompiler(file);
+                    case PYTHON -> compiler = new PythonCompiler(file);
+                    case LISP -> compiler = new LispCompiler(file);
+                    default -> compiler = new CCompiler(file);
+                    } 
+                    Result result = compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
                     System.out.println(Config.getInstance().COMPILER_PATH + " " + Config.getInstance().ARGS);
                     System.out.println("status: " + result.getStatus());
                     System.out.println("output: " + result.getOutput());
@@ -53,8 +65,9 @@ public class ResultsController implements Initializable {
                     people.add(person);
                 }
             }
-        } catch (IOException | InterruptedException e) {
+        } catch (Exception e) {
             e.printStackTrace();
+            ConfigController.createAlert(e.getMessage(), "Error");
         }
         setupTable();
 
@@ -69,6 +82,7 @@ public class ResultsController implements Initializable {
         });
     }
 
+    // TODO: Please someone add columns for error and status. In addition, there should be a label indicating the expected value. Thank you very much.
     private void setupTable() {
         MFXTableColumn<Person> idColumn = new MFXTableColumn<>("ID", true, Comparator.comparing(Person::getId));
         MFXTableColumn<Person> outputColumn = new MFXTableColumn<>("Output", true, Comparator.comparing(Person::getOutput));

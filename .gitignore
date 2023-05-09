@@ -18,12 +18,16 @@
 # *.zip
 *.tar.gz
 *.rar
-a.out
+*.out
+*.exe
 
 # Assignment files
 cSampleAssignment/!*.zip
 lispSampleAssignment/!*.zip
 pythonSampleAssignment/!*.zip
+
+# assignment config files
+*.assignit
 
 # virtual machine crash logs, see http://www.java.com/en/download/help/error_hotspot.xml
 hs_err_pid*

@@ -4,46 +4,37 @@ import java.io.File;
 import java.sql.*;
 
 public class Database {
+    private static Database instance;
+    Connection connection;
+    private String path;
 
+    // singleton
+    private Database() {
+    }
+    
+    public static Database getInstance() {
+        if (instance == null) {
+            instance = new Database();
+        }
+        return instance;
+    }
 
-    private Connection conn;
-
-    public Database() {
-
-
-        File file = new File("assignitdb.db");
-        boolean firstRun = !file.exists();
+    // connect to the path, create assignment config by executing SQL, then disconnect
+    public void createAssignmentConfig(String path) throws SQLException {
+        this.path = path;
+        File file = new File(path);
+        boolean noSavedConfig = !file.exists();
         try {
             Class.forName("org.sqlite.JDBC");
-            conn = DriverManager.getConnection("jdbc:sqlite:assignitdb.db");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + path);
 
-
-            if (firstRun) {
-                Statement stat = conn.createStatement();
-                stat.executeUpdate(" CREATE TABLE config_table (ID integer primary key autoincrement NOT NULL,COMPILER_PATH varchar(255),ASSIGNMENT_PATH varchar(255),ARGS varchar(255),EXPECTED varchar(255));");
+            if (noSavedConfig) {
+                Statement stat = connection.createStatement();
+                stat.executeUpdate(" CREATE TABLE config_table (ID int,COMPILER_PATH varchar(255),ASSIGNMENT_PATH varchar(255),ARGS varchar(255),EXPECTED varchar(255),RUN_COMMAND varchar(255),SELECTED_LANGUAGE varchar(255));");
             }
-
-
+            connection.close();
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
         }
-
-
-
-    }
-    public void insertConfig(final Config config) throws SQLException{
-        final PreparedStatement statement = conn.prepareStatement("insert into config_table " +
-                "(COMPILER_PATH, " +
-                "ASSIGNMENT_PATH, " +
-                "ARGS, " +
-                "EXPECTED) " +
-                "values (?, ?, ?, ?) ");
-                statement.setString(1,config.COMPILER_PATH);
-                statement.setString(2,config.ASSIGNMENT_PATH);
-                statement.setString(3,config.ARGS);
-                statement.setString(4,config.EXPECTED);
-
-            statement.executeUpdate();
-
     }
 }

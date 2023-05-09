@@ -21,7 +21,6 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         createNewButton.setOnAction(actionEvent -> {
             try {
                 Application.changeScene("fxml/config.fxml", 300, 520);
