@@ -13,4 +13,6 @@ module edu.ieu.assignit {
     exports edu.ieu.assignit;
     exports edu.ieu.assignit.Controllers;
     opens edu.ieu.assignit.Controllers to javafx.fxml;
+    exports edu.ieu.assignit.Compilers;
+    opens edu.ieu.assignit.Compilers to javafx.fxml;
 }

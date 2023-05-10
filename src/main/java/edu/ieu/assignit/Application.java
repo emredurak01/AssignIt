@@ -3,11 +3,17 @@ package edu.ieu.assignit;
 import edu.ieu.assignit.Controllers.MainController;
 import io.github.palexdev.materialfx.css.themes.MFXThemeManager;
 import io.github.palexdev.materialfx.css.themes.Themes;
+import io.github.palexdev.materialfx.dialogs.MFXGenericDialog;
+import io.github.palexdev.materialfx.dialogs.MFXGenericDialogBuilder;
+import io.github.palexdev.materialfx.dialogs.MFXStageDialog;
+import io.github.palexdev.materialfx.enums.ScrimPriority;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.util.Objects;
 
@@ -19,6 +25,19 @@ public class Application extends javafx.application.Application {
         primaryStage.setWidth(width);
         primaryStage.setHeight(height);
         primaryStage.getScene().setRoot(newScene);
+    }
+
+    public static void createAlert(String content, String header) {
+        MFXGenericDialog dialogContent = MFXGenericDialogBuilder.build().setContentText(content).get();
+        MFXStageDialog dialog = MFXGenericDialogBuilder.build(dialogContent).toStageDialogBuilder().initModality(Modality.APPLICATION_MODAL).setDraggable(true).setTitle("Dialog").setScrimPriority(ScrimPriority.WINDOW).setScrimOwner(true).get();
+
+        dialogContent.setMaxSize(600, 600);
+
+        //MFXFontIcon infoIcon = new MFXFontIcon("", 18);
+        //dialogContent.setHeaderIcon(infoIcon);
+
+        dialogContent.setHeaderText(header);
+        dialog.showDialog();
     }
 
     @Override

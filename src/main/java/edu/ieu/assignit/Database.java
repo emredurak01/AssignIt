@@ -1,9 +1,6 @@
 package edu.ieu.assignit;
 
-import java.io.File;
 import java.sql.*;
-
-import edu.ieu.assignit.Controllers.ConfigController;
 
 public class Database {
     private static Database instance;
@@ -13,7 +10,7 @@ public class Database {
     // singleton
     private Database() {
     }
-    
+
     public static Database getInstance() {
         if (instance == null) {
             instance = new Database();
@@ -27,13 +24,13 @@ public class Database {
         try {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + path);
-                Statement stat = connection.createStatement();
-                stat.executeUpdate("CREATE TABLE if not exists config_table (ID INTEGER PRIMARY KEY AUTOINCREMENT,COMPILER_PATH varchar(255), ARGS varchar(255),EXPECTED varchar(255),RUN_COMMAND varchar(255),SELECTED_LANGUAGE varchar(255));");
-                stat.close();
-                
+            Statement stat = connection.createStatement();
+            stat.executeUpdate("CREATE TABLE if not exists config_table (ID INTEGER PRIMARY KEY AUTOINCREMENT,COMPILER_PATH varchar(255), ARGS varchar(255),EXPECTED varchar(255),RUN_COMMAND varchar(255),SELECTED_LANGUAGE varchar(255));");
+            stat.close();
+
         } catch (ClassNotFoundException | SQLException e) {
             System.err.println(e);
-            ConfigController.createAlert(e.getMessage(), "Error");
+            Application.createAlert(e.getMessage(), "Error");
         }
     }
 

@@ -1,7 +1,12 @@
 package edu.ieu.assignit.Controllers;
 
 import edu.ieu.assignit.Application;
-import edu.ieu.assignit.CCompiler;
+import edu.ieu.assignit.Compilers.CCompiler;
+import edu.ieu.assignit.Compilers.Compiler;
+import edu.ieu.assignit.Compilers.LispCompiler;
+import edu.ieu.assignit.Compilers.PythonCompiler;
+import edu.ieu.assignit.Config;
+import edu.ieu.assignit.Result;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
 import io.github.palexdev.materialfx.controls.MFXTableView;
@@ -16,19 +21,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Comparator;
 import java.util.ResourceBundle;
-import edu.ieu.assignit.Config;
-import edu.ieu.assignit.Result;
-
-import edu.ieu.assignit.Compiler;
-import edu.ieu.assignit.PythonCompiler;
-import edu.ieu.assignit.LispCompiler;
 
 public class ResultsController implements Initializable {
     @FXML
     private MFXTableView<Submission> table;
     @FXML
     private MFXButton backButton;
-    private ObservableList<Submission> people = FXCollections.observableArrayList();
+    private final ObservableList<Submission> submissions = FXCollections.observableArrayList();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         try {
@@ -38,11 +38,11 @@ public class ResultsController implements Initializable {
                     System.out.println(file.getName() + " is working directory for compiling");
                     Compiler compiler;
                     switch (Config.getInstance().SELECTED_LANGUAGE) {
-                    case C -> compiler = new CCompiler(file);
-                    case PYTHON -> compiler = new PythonCompiler(file);
-                    case LISP -> compiler = new LispCompiler(file);
-                    default -> compiler = new CCompiler(file);
-                    } 
+                        case C -> compiler = new CCompiler(file);
+                        case PYTHON -> compiler = new PythonCompiler(file);
+                        case LISP -> compiler = new LispCompiler(file);
+                        default -> compiler = new CCompiler(file);
+                    }
                     Result result = compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
                     System.out.println(Config.getInstance().COMPILER_PATH + " " + Config.getInstance().ARGS);
                     System.out.println("status: " + result.getStatus());
@@ -52,26 +52,26 @@ public class ResultsController implements Initializable {
                     // check results
                     String isError;
                     String resultString;
-                    if (result.getOutput() == null){
+                    if (result.getOutput() == null) {
                         resultString = "Incorrect";
-                    }else if(result.getOutput().equals(Config.getInstance().EXPECTED)){
+                    } else if (result.getOutput().equals(Config.getInstance().EXPECTED)) {
                         resultString = "Correct";
 
-                    }else {
+                    } else {
                         resultString = "Incorrect";
                     }
-                    if (result.getError() == null){
+                    if (result.getError() == null) {
                         isError = "None";
-                    }else {
+                    } else {
                         isError = result.getError();
                     }
-                    Submission submission = new Submission(file.getName(), result.getOutput(), resultString, result.getStatus(), isError,Config.getInstance().EXPECTED);
-                    people.add(submission);
+                    Submission submission = new Submission(file.getName(), result.getOutput(), resultString, result.getStatus(), isError, Config.getInstance().EXPECTED);
+                    this.submissions.add(submission);
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            ConfigController.createAlert(e.getMessage(), "Error");
+            Application.createAlert(e.getMessage(), "Error");
         }
         setupTable();
 
@@ -89,10 +89,10 @@ public class ResultsController implements Initializable {
     private void setupTable() {
         MFXTableColumn<Submission> idColumn = new MFXTableColumn<>("ID", true, Comparator.comparing(Submission::getId));
         MFXTableColumn<Submission> outputColumn = new MFXTableColumn<>("Output", true, Comparator.comparing(Submission::getOutput));
-        MFXTableColumn<Submission> expectedValueColumn =  new MFXTableColumn<>("Expected Value",true,Comparator.comparing(Submission::getExpectedValue));
+        MFXTableColumn<Submission> expectedValueColumn = new MFXTableColumn<>("Expected Value", true, Comparator.comparing(Submission::getExpectedValue));
         MFXTableColumn<Submission> resultColumn = new MFXTableColumn<>("Result", true, Comparator.comparing(Submission::getResult));
-        MFXTableColumn<Submission> statusColumn =  new MFXTableColumn<>("Status",true, Comparator.comparing(Submission::getStatus));
-        MFXTableColumn<Submission> errorColumn = new MFXTableColumn<>("Error",true,Comparator.comparing(Submission::getError));
+        MFXTableColumn<Submission> statusColumn = new MFXTableColumn<>("Status", true, Comparator.comparing(Submission::getStatus));
+        MFXTableColumn<Submission> errorColumn = new MFXTableColumn<>("Error", true, Comparator.comparing(Submission::getError));
         idColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getId));
         outputColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getOutput));
         resultColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getResult));
@@ -100,7 +100,7 @@ public class ResultsController implements Initializable {
         errorColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getError));
         expectedValueColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getExpectedValue));
         table.getTableColumns().addAll(idColumn, outputColumn, resultColumn, statusColumn, errorColumn, expectedValueColumn);
-        table.setItems(people);
+        table.setItems(submissions);
     }
 
 }

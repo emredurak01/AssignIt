@@ -6,6 +6,7 @@ public class Config {
     public String COMPILER_PATH;
     public String ASSIGNMENT_PATH;
     public String ARGS;
+    public String RUN_COMMAND;
     public String EXPECTED;
     private Config() {
     }

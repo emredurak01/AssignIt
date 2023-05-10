@@ -1,7 +1,6 @@
 package edu.ieu.assignit.Controllers;
 
 import edu.ieu.assignit.Application;
-import edu.ieu.assignit.Database;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
@@ -30,7 +29,7 @@ public class MainController implements Initializable {
         });
 
         //TODO: Help content
-        helpButton.setOnAction(actionEvent -> ConfigController.createAlert("Content here", "Help"));
+        helpButton.setOnAction(actionEvent -> Application.createAlert("Content here", "Help"));
 
         exitButton.setOnAction(actionEvent -> Platform.exit());
     }
