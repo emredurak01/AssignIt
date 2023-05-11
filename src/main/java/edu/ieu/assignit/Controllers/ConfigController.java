@@ -73,7 +73,13 @@ public class ConfigController implements Initializable {
 
         StringBuilder selectedDirectoryPath = new StringBuilder(); // it is indicating the selected directory name
         // I used StringBuilder because it is effectively final so it can be used in lambdas, unlike String
-        assignmentChooser.setOnAction(actionEvent -> importConfig(selectedDirectoryPath, comboList));
+        assignmentChooser.setOnAction(actionEvent -> {
+            try {
+                importConfig(selectedDirectoryPath, comboList);
+            } catch (SQLException throwables) {
+                throwables.printStackTrace();
+            }
+        });
 
         saveButton.setOnAction(actionEvent -> exportConfig(selectedDirectoryPath));
 
@@ -109,7 +115,7 @@ public class ConfigController implements Initializable {
         expected.setText("");
     }
 
-    private void importConfig(StringBuilder selectedDirectoryPath, ObservableList<String> comboList) {
+    private void importConfig(StringBuilder selectedDirectoryPath, ObservableList<String> comboList) throws SQLException {
 
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(primaryStage);
@@ -128,7 +134,17 @@ public class ConfigController implements Initializable {
             if (file.exists()) {
                 System.out.println("File exists.");
                 comboList.add("Custom Config");
-                //TODO: Call getConfig here, and then fill up the text fields
+
+                Config config = Database.getInstance().getConfig();
+                if (config.SELECTED_LANGUAGE.toString().equals("C")){
+                    fillTextFields(config.COMPILER_PATH,config.ARGS,true,config.RUN_COMMAND);
+
+                }
+                else {
+                    fillTextFields(config.COMPILER_PATH,config.ARGS,false,"");
+
+                }
+
             } else {
                 System.out.println("File does not exist.");
             }

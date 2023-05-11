@@ -48,6 +48,26 @@ public class Database {
         ps.executeUpdate();
         ps.close();
     }
+    public Config getConfig() throws SQLException {
+        Config config = Config.getInstance();
+
+        String sql = "SELECT COMPILER_PATH, ARGS, EXPECTED, RUN_COMMAND, SELECTED_LANGUAGE FROM config_table WHERE ID = 1";
+        Statement stat = connection.createStatement();
+        ResultSet rs = stat.executeQuery(sql);
+
+        if (rs.next()) {
+            config.COMPILER_PATH = rs.getString("COMPILER_PATH");
+            config.ARGS = rs.getString("ARGS");
+            config.EXPECTED = rs.getString("EXPECTED");
+            config.RUN_COMMAND = rs.getString("RUN_COMMAND");
+            config.SELECTED_LANGUAGE = Language.valueOf(rs.getString("SELECTED_LANGUAGE"));
+        }
+
+        rs.close();
+        stat.close();
+
+        return config;
+    }
 
     public void disconnect() throws SQLException {
         connection.close();
