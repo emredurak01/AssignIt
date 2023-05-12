@@ -11,13 +11,13 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.PieChart;
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 import static edu.ieu.assignit.Application.primaryStage;
@@ -86,34 +86,36 @@ public class ConfigController implements Initializable {
         configComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                if (configComboBox.getValue() == null) {
+                String comboBoxValue = configComboBox.getValue();
+                String directoryString = selectedDirectoryPath.toString();
+                if (comboBoxValue == null) {
 
-                } else if (configComboBox.getValue().equals("C Config")) {
+                } else if (comboBoxValue.equals("C Config")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.C;
-                    fillTextFields(CCompiler.COMPILER_PATH, CCompiler.ARGS, true, CCompiler.RUN_COMMAND);
-                } else if (configComboBox.getValue().equals("Python Config")) {
+                    fillTextFields(directoryString, CCompiler.COMPILER_PATH, CCompiler.ARGS, true, CCompiler.RUN_COMMAND);
+                } else if (comboBoxValue.equals("Python Config")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.PYTHON;
-                    fillTextFields(PythonCompiler.COMPILER_PATH, PythonCompiler.ARGS, false, "");
-                } else if (configComboBox.getValue().equals("Emacs Lisp Config")) {
+                    fillTextFields(directoryString, PythonCompiler.COMPILER_PATH, PythonCompiler.ARGS, false, "");
+                } else if (comboBoxValue.equals("Emacs Lisp Config")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.LISP;
-                    fillTextFields(LispCompiler.COMPILER_PATH, LispCompiler.ARGS, false, "");
-                } else if (configComboBox.getValue().equals("Scheme Config")) {
+                    fillTextFields(directoryString, LispCompiler.COMPILER_PATH, LispCompiler.ARGS, false, "");
+                } else if (comboBoxValue.equals("Scheme Config")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.SCHEME;
-                    fillTextFields(SchemeCompiler.COMPILER_PATH, SchemeCompiler.ARGS, false, "");
-                }  else if (configComboBox.getValue().equals("Java Config")) {
+                    fillTextFields(directoryString, SchemeCompiler.COMPILER_PATH, SchemeCompiler.ARGS, false, "");
+                } else if (comboBoxValue.equals("Java Config")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.JAVA;
-                    fillTextFields(JavaCompiler.COMPILER_PATH, JavaCompiler.ARGS, true, JavaCompiler.RUN_COMMAND);
-                }  else if (configComboBox.getValue().equals("Haskell Config")) {
+                    fillTextFields(directoryString, JavaCompiler.COMPILER_PATH, JavaCompiler.ARGS, true, JavaCompiler.RUN_COMMAND);
+                } else if (comboBoxValue.equals("Haskell Config")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.HASKELL;
-                    fillTextFields(HaskellCompiler.COMPILER_PATH, HaskellCompiler.ARGS, true, HaskellCompiler.RUN_COMMAND);
+                    fillTextFields(directoryString, HaskellCompiler.COMPILER_PATH, HaskellCompiler.ARGS, true, HaskellCompiler.RUN_COMMAND);
                 }
             }
         });
 
     }
 
-    private void fillTextFields(String compilerPathParam, String argsParam, boolean runFieldBool, String runFieldParam) {
-        assignmentPath.setText("");
+    private void fillTextFields(String assignmentPathParam, String compilerPathParam, String argsParam, boolean runFieldBool, String runFieldParam) {
+        assignmentPath.setText(Objects.requireNonNullElse(assignmentPathParam, ""));
         compilerPath.setText(compilerPathParam);
         args.setText(argsParam);
         runField.setVisible(runFieldBool);
@@ -146,12 +148,10 @@ public class ConfigController implements Initializable {
                 Database.getInstance().connect(selectedDirectoryPath + "/config.assignit");
                 Config config = Database.getInstance().getConfig();
                 Database.getInstance().disconnect();
-                if (config.SELECTED_LANGUAGE.toString().equals("C")){
-                    fillTextFields(config.COMPILER_PATH,config.ARGS,true,config.RUN_COMMAND);
-
-                }
-                else {
-                    fillTextFields(config.COMPILER_PATH,config.ARGS,false,"");
+                if (config.SELECTED_LANGUAGE.toString().equals("C")) {
+                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
+                } else {
+                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
 
                 }
 
