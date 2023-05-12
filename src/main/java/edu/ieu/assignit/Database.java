@@ -19,16 +19,24 @@ public class Database {
     }
 
     // disconnect if connection is not null, connect to the path, create assignment config by executing SQL
-    public void createAssignmentConfig(String path) throws SQLException {
-        this.path = path;
+    public void createAssignmentConfig() throws SQLException {
         try {
-            Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + path);
             Statement stat = connection.createStatement();
             stat.executeUpdate("CREATE TABLE if not exists config_table (ID INTEGER PRIMARY KEY AUTOINCREMENT,COMPILER_PATH varchar(255), ARGS varchar(255),EXPECTED varchar(255),RUN_COMMAND varchar(255),SELECTED_LANGUAGE varchar(255));");
             stat.close();
 
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (SQLException e) {
+            System.err.println(e);
+            Application.createAlert(e.getMessage(), "Error");
+        }
+    }
+
+    public void connect(String path) {
+        this.path = path;
+        try {
+            Class.forName("org.sqlite.JDBC");
+            connection = DriverManager.getConnection("jdbc:sqlite:" + path);
+        } catch (Exception e) {
             System.err.println(e);
             Application.createAlert(e.getMessage(), "Error");
         }
@@ -53,9 +61,6 @@ public class Database {
         Config config = Config.getInstance();
 
         String sql = "SELECT COMPILER_PATH, ARGS, EXPECTED, RUN_COMMAND, SELECTED_LANGUAGE FROM config_table WHERE ID = 1";
-        if (connection == null){
-            createAssignmentConfig(config.ASSIGNMENT_PATH);
-        }
         Statement stat = connection.createStatement();
         ResultSet rs = stat.executeQuery(sql);
 

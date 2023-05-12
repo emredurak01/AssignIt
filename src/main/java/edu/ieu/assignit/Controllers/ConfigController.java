@@ -142,7 +142,10 @@ public class ConfigController implements Initializable {
                 System.out.println("File exists.");
                 comboList.add("Custom Config");
 
+                // TODO: there are other languages that require run_command
+                Database.getInstance().connect(selectedDirectoryPath + "/config.assignit");
                 Config config = Database.getInstance().getConfig();
+                Database.getInstance().disconnect();
                 if (config.SELECTED_LANGUAGE.toString().equals("C")){
                     fillTextFields(config.COMPILER_PATH,config.ARGS,true,config.RUN_COMMAND);
 
@@ -166,7 +169,8 @@ public class ConfigController implements Initializable {
         // .assignit is our assignment config file extension. We could also use .db.
         try {
             if (!selectedDirectoryPath.isEmpty()) {
-                Database.getInstance().createAssignmentConfig(selectedDirectoryPath + "/config.assignit");
+                Database.getInstance().connect(selectedDirectoryPath + "/config.assignit");
+                Database.getInstance().createAssignmentConfig();
                 Database.getInstance().addConfig(compilerPath.getText(), args.getText(), expected.getText(), runField.getText(), Config.getInstance().SELECTED_LANGUAGE.toString());
                 Database.getInstance().disconnect();
 
