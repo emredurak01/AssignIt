@@ -23,6 +23,11 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.*;
+import javafx.scene.control.Alert;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.ScrollPane;
+
+
 
 import javafx.beans.value.*;
 
@@ -32,6 +37,7 @@ import java.net.URL;
 import java.util.*;
 import java.io.*;
 import edu.ieu.assignit.Controllers.*;
+
 import static edu.ieu.assignit.Application.primaryStage;
 
 public class ResultsController implements Initializable {
@@ -142,11 +148,11 @@ public class ResultsController implements Initializable {
 
         table.getFilters().addAll(
                 new StringFilter<>("ID", Submission::getId),
-                new StringFilter<>("Output", Submission::getOutput),
+                new StringFilter<>("Output", Submission::getOutput), //details
                 new StringFilter<>("Expected Value", Submission::getExpectedValue),
                 new StringFilter<>("Result", Submission::getResult),
                 new IntegerFilter<>("Status", Submission::getStatus),
-                new StringFilter<>("Error", Submission::getError)
+                new StringFilter<>("Error", Submission::getError) //details
         );
 
         detailsButton.setOnAction(actionEvent -> handleRowSelection());
@@ -157,7 +163,32 @@ public class ResultsController implements Initializable {
         ObservableMap<Integer, Submission> listValues = table.getSelectionModel().getSelection();
         ObservableList<Submission> submissionsList = FXCollections.observableArrayList(listValues.values());
 
-        System.out.println(submissionsList.listIterator().next()); //TODO: Show alert with submission details
-    }
+        if (!submissionsList.isEmpty()) {
+            Submission selectedSubmission = submissionsList.get(0);
 
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Submission Details");
+            alert.setHeaderText("ID: " + selectedSubmission.getId());
+
+            TextArea detailsTextArea = new TextArea();
+            detailsTextArea.setText(
+                    "Output: " + selectedSubmission.getOutput() + "\n" +
+                            "Status: " + selectedSubmission.getStatus() + "\n" +
+                            "Expected Value: " + selectedSubmission.getExpectedValue() + "\n" +
+                            "Error: " + selectedSubmission.getError()
+            );
+            detailsTextArea.setEditable(false);
+
+            ScrollPane scrollPane = new ScrollPane(detailsTextArea);
+            scrollPane.setFitToWidth(true);
+            scrollPane.setFitToHeight(true);
+
+            alert.getDialogPane().setContent(detailsTextArea);
+
+
+            alert.showAndWait();
+        }
+
+}
 }
