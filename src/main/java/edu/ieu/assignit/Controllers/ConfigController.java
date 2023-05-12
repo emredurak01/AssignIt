@@ -1,9 +1,7 @@
 package edu.ieu.assignit.Controllers;
 
 import edu.ieu.assignit.*;
-import edu.ieu.assignit.Compilers.CCompiler;
-import edu.ieu.assignit.Compilers.LispCompiler;
-import edu.ieu.assignit.Compilers.PythonCompiler;
+import edu.ieu.assignit.Compilers.*;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXComboBox;
 import io.github.palexdev.materialfx.controls.MFXTextField;
@@ -82,8 +80,8 @@ public class ConfigController implements Initializable {
         });
 
         saveButton.setOnAction(actionEvent -> exportConfig(selectedDirectoryPath));
-
-        comboList.addAll("C Config", "Python Config", "Emacs Lisp Config");
+        // TODO: Scheme interpreter shows only the first one if the output consists of multiple lines
+        comboList.addAll("C Config", "Python Config", "Emacs Lisp Config", "Scheme Config");
         configComboBox.setItems(comboList);
         configComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -99,6 +97,9 @@ public class ConfigController implements Initializable {
                 } else if (configComboBox.getValue().equals("Emacs Lisp Config")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.LISP;
                     fillTextFields(LispCompiler.COMPILER_PATH, LispCompiler.ARGS, false, "");
+                } else if (configComboBox.getValue().equals("Scheme Config")) {
+                    Config.getInstance().SELECTED_LANGUAGE = Language.SCHEME;
+                    fillTextFields(SchemeCompiler.COMPILER_PATH, SchemeCompiler.ARGS, false, "");
                 }
             }
         });
