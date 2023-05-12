@@ -22,9 +22,12 @@
 *.exe
 
 # Assignment files
-cSampleAssignment/!*.zip
-lispSampleAssignment/!*.zip
-pythonSampleAssignment/!*.zip
+sample-assignments/c/!*.zip
+sample-assignments/lisp/!*.zip
+sample-assignments/java/!*.zip
+sample-assignments/haskell/!*.zip
+sample-assignments/scheme/!*.zip
+sample-assignments/python/!*.zip
 
 # assignment config files
 *.assignit
