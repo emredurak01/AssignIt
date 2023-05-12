@@ -9,7 +9,7 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0"/>
     </padding>
     <children>
-        <MFXComboBox id="customNCombo" fx:id="configComboBox" allowEdit="false" editable="false" floatingText="Config"
+        <MFXComboBox id="customNCombo" fx:id="configComboBox" allowEdit="false" editable="false" floatingText="Selected Language"
                      prefWidth="154.0" styleClass="mfx-combo-box" stylesheets="@../css/comboboxes.css">
             <VBox.margin>
                 <Insets/>

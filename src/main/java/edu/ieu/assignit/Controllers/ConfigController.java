@@ -23,7 +23,6 @@ import java.util.ResourceBundle;
 import static edu.ieu.assignit.Application.primaryStage;
 
 public class ConfigController implements Initializable {
-
     @FXML
     private MFXComboBox<String> configComboBox;
     @FXML
@@ -47,6 +46,9 @@ public class ConfigController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
         ObservableList<String> comboList = FXCollections.observableArrayList();
+        comboList.addAll("Generic", "C", "Python", "Emacs Lisp", "Scheme", "Java", "Haskell");
+        configComboBox.setItems(comboList);
+        configComboBox.getSelectionModel().selectFirst();
 
         Config.getInstance().SELECTED_LANGUAGE = Language.GENERIC; // reset the language
         runButton.setOnAction(actionEvent -> {
@@ -81,31 +83,31 @@ public class ConfigController implements Initializable {
         });
 
         saveButton.setOnAction(actionEvent -> exportConfig(selectedDirectoryPath));
-        comboList.addAll("C Config", "Python Config", "Emacs Lisp Config", "Scheme Config", "Java Config", "Haskell Config");
-        configComboBox.setItems(comboList);
         configComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 String comboBoxValue = configComboBox.getValue();
                 String directoryString = selectedDirectoryPath.toString();
                 if (comboBoxValue == null) {
-
-                } else if (comboBoxValue.equals("C Config")) {
+                } else if (comboBoxValue.equals("Generic")) {
+                    Config.getInstance().SELECTED_LANGUAGE = Language.GENERIC;
+                    fillTextFields(directoryString, "", "", true, "");
+                } else if (comboBoxValue.equals("C")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.C;
                     fillTextFields(directoryString, CCompiler.COMPILER_PATH, CCompiler.ARGS, true, CCompiler.RUN_COMMAND);
-                } else if (comboBoxValue.equals("Python Config")) {
+                } else if (comboBoxValue.equals("Python")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.PYTHON;
                     fillTextFields(directoryString, PythonCompiler.COMPILER_PATH, PythonCompiler.ARGS, false, "");
-                } else if (comboBoxValue.equals("Emacs Lisp Config")) {
+                } else if (comboBoxValue.equals("Emacs Lisp")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.LISP;
                     fillTextFields(directoryString, LispCompiler.COMPILER_PATH, LispCompiler.ARGS, false, "");
-                } else if (comboBoxValue.equals("Scheme Config")) {
+                } else if (comboBoxValue.equals("Scheme")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.SCHEME;
                     fillTextFields(directoryString, SchemeCompiler.COMPILER_PATH, SchemeCompiler.ARGS, false, "");
-                } else if (comboBoxValue.equals("Java Config")) {
+                } else if (comboBoxValue.equals("Java")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.JAVA;
                     fillTextFields(directoryString, JavaCompiler.COMPILER_PATH, JavaCompiler.ARGS, true, JavaCompiler.RUN_COMMAND);
-                } else if (comboBoxValue.equals("Haskell Config")) {
+                } else if (comboBoxValue.equals("Haskell")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.HASKELL;
                     fillTextFields(directoryString, HaskellCompiler.COMPILER_PATH, HaskellCompiler.ARGS, true, HaskellCompiler.RUN_COMMAND);
                 }
@@ -152,7 +154,7 @@ public class ConfigController implements Initializable {
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
                 } else {
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
-                    configComboBox.getSelectionModel().selectItem("Custom Config");
+
                 }
 
             } else {
