@@ -13,14 +13,20 @@ import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.stage.*;
+
+import javafx.beans.value.*;
 
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Comparator;
-import java.util.ResourceBundle;
+import java.util.*;
+import java.io.*;
+import edu.ieu.assignit.Controllers.*;
+import static edu.ieu.assignit.Application.primaryStage;
 
 public class ResultsController implements Initializable {
     @FXML
@@ -84,6 +90,30 @@ public class ResultsController implements Initializable {
                 throw new RuntimeException(e);
             }
         });
+    }
+
+    // TODO: fill the in-loop
+    private void exportPassedStudents() {
+        FileChooser fileChooser = new FileChooser();
+        File selectedFile = fileChooser.showSaveDialog(primaryStage);
+        if (selectedFile != null) {
+            try (PrintWriter writer = new PrintWriter(selectedFile)) {
+                // write the submission IDs with "correct" result
+                for (Submission submission : table.getItems()) {
+                    if (submission.getResult().equals("Correct")) {
+                        for (MFXTableColumn<Submission> column : table.getTableColumns()) {
+                        }
+                        // writer.println();
+                    }
+                }
+        
+                Application.createAlert("Passed students are exported to the file", "success");
+            } catch (IOException ex) {
+                Application.createAlert("Error exporting students: " + ex.getMessage(), "error");
+            }
+        } else {
+            Application.createAlert("Selected file is null", "error");
+        }
     }
 
     private void setupTable() {

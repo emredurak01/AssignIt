@@ -80,8 +80,7 @@ public class ConfigController implements Initializable {
         });
 
         saveButton.setOnAction(actionEvent -> exportConfig(selectedDirectoryPath));
-        // TODO: Scheme interpreter shows only the first one if the output consists of multiple lines
-        comboList.addAll("C Config", "Python Config", "Emacs Lisp Config", "Scheme Config");
+        comboList.addAll("C Config", "Python Config", "Emacs Lisp Config", "Scheme Config", "Java Config", "Haskell Config");
         configComboBox.setItems(comboList);
         configComboBox.valueProperty().addListener(new ChangeListener<String>() {
             @Override
@@ -100,6 +99,12 @@ public class ConfigController implements Initializable {
                 } else if (configComboBox.getValue().equals("Scheme Config")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.SCHEME;
                     fillTextFields(SchemeCompiler.COMPILER_PATH, SchemeCompiler.ARGS, false, "");
+                }  else if (configComboBox.getValue().equals("Java Config")) {
+                    Config.getInstance().SELECTED_LANGUAGE = Language.JAVA;
+                    fillTextFields(JavaCompiler.COMPILER_PATH, JavaCompiler.ARGS, true, JavaCompiler.RUN_COMMAND);
+                }  else if (configComboBox.getValue().equals("Haskell Config")) {
+                    Config.getInstance().SELECTED_LANGUAGE = Language.HASKELL;
+                    fillTextFields(HaskellCompiler.COMPILER_PATH, HaskellCompiler.ARGS, true, HaskellCompiler.RUN_COMMAND);
                 }
             }
         });

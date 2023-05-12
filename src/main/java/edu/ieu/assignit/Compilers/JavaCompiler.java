@@ -7,13 +7,12 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-// It is called compiler for convenience
-// and uses Python 3 for interpretation.
-public class PythonCompiler extends Compiler {
-    public static final String COMPILER_PATH = "python3";
-    public static final String ARGS = "main.py";
+public class JavaCompiler extends Compiler {
+    public static final String COMPILER_PATH = "javac";
+    public static final String ARGS = "*.java";
+    public static final String RUN_COMMAND = "java Main.java";
 
-    public PythonCompiler(File workingDirectory) {
+    public JavaCompiler(File workingDirectory) {
         super(workingDirectory);
     }
 
