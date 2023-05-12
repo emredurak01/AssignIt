@@ -9,13 +9,19 @@ import edu.ieu.assignit.Config;
 import edu.ieu.assignit.Result;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
+import io.github.palexdev.materialfx.controls.MFXTableRow;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
+import io.github.palexdev.materialfx.filter.IntegerFilter;
+import io.github.palexdev.materialfx.filter.StringFilter;
+import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.*;
 
 import javafx.beans.value.*;
@@ -33,6 +39,8 @@ public class ResultsController implements Initializable {
     private MFXTableView<Submission> table;
     @FXML
     private MFXButton backButton;
+    @FXML
+    private MFXButton detailsButton;
     private final ObservableList<Submission> submissions = FXCollections.observableArrayList();
 
     @Override
@@ -106,7 +114,7 @@ public class ResultsController implements Initializable {
                         // writer.println();
                     }
                 }
-        
+
                 Application.createAlert("Passed students are exported to the file", "success");
             } catch (IOException ex) {
                 Application.createAlert("Error exporting students: " + ex.getMessage(), "error");
@@ -131,6 +139,25 @@ public class ResultsController implements Initializable {
         expectedValueColumn.setRowCellFactory(submission -> new MFXTableRowCell<>(Submission::getExpectedValue));
         table.getTableColumns().addAll(idColumn, outputColumn, resultColumn, statusColumn, errorColumn, expectedValueColumn);
         table.setItems(submissions);
+
+        table.getFilters().addAll(
+                new StringFilter<>("ID", Submission::getId),
+                new StringFilter<>("Output", Submission::getOutput),
+                new StringFilter<>("Expected Value", Submission::getExpectedValue),
+                new StringFilter<>("Result", Submission::getResult),
+                new IntegerFilter<>("Status", Submission::getStatus),
+                new StringFilter<>("Error", Submission::getError)
+        );
+
+        detailsButton.setOnAction(actionEvent -> handleRowSelection());
+
+    }
+
+    private void handleRowSelection() {
+        ObservableMap<Integer, Submission> listValues = table.getSelectionModel().getSelection();
+        ObservableList<Submission> submissionsList = FXCollections.observableArrayList(listValues.values());
+
+        System.out.println(submissionsList.listIterator().next()); //TODO: Show alert with submission details
     }
 
 }
