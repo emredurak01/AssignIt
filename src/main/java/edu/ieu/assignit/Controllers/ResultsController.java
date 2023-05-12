@@ -179,10 +179,13 @@ public class ResultsController implements Initializable {
                             "Error: " + selectedSubmission.getError()
             );
             detailsTextArea.setEditable(false);
+            detailsTextArea.setWrapText(true);  // Wrap the text to separate lines
 
             ScrollPane scrollPane = new ScrollPane(detailsTextArea);
             scrollPane.setFitToWidth(true);
             scrollPane.setFitToHeight(true);
+            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
 
             alert.getDialogPane().setContent(detailsTextArea);
 
