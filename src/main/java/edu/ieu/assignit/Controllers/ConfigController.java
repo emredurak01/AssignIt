@@ -152,7 +152,7 @@ public class ConfigController implements Initializable {
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
                 } else {
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
-
+                    configComboBox.getSelectionModel().selectItem("Custom Config");
                 }
 
             } else {

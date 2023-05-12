@@ -164,34 +164,14 @@ public class ResultsController implements Initializable {
         ObservableList<Submission> submissionsList = FXCollections.observableArrayList(listValues.values());
 
         if (!submissionsList.isEmpty()) {
-            Submission selectedSubmission = submissionsList.get(0);
+            Submission selectedSubmission = submissionsList.iterator().next();
 
+            Application.createAlert("Output: \n" + selectedSubmission.getOutput() + "\n" +
+                    "Status: " + selectedSubmission.getStatus() + "\n" +
+                    "Expected Value: " + selectedSubmission.getExpectedValue() + "\n" +
+                    "Error: \n" + selectedSubmission.getError(),"Submission Details");
 
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Submission Details");
-            alert.setHeaderText("ID: " + selectedSubmission.getId());
-
-            TextArea detailsTextArea = new TextArea();
-            detailsTextArea.setText(
-                    "Output: " + selectedSubmission.getOutput() + "\n" +
-                            "Status: " + selectedSubmission.getStatus() + "\n" +
-                            "Expected Value: " + selectedSubmission.getExpectedValue() + "\n" +
-                            "Error: " + selectedSubmission.getError()
-            );
-            detailsTextArea.setEditable(false);
-            detailsTextArea.setWrapText(true);  // Wrap the text to separate lines
-
-            ScrollPane scrollPane = new ScrollPane(detailsTextArea);
-            scrollPane.setFitToWidth(true);
-            scrollPane.setFitToHeight(true);
-            scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
-
-
-            alert.getDialogPane().setContent(detailsTextArea);
-
-
-            alert.showAndWait();
         }
 
-}
+    }
 }
