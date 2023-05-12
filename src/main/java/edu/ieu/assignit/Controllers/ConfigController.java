@@ -142,7 +142,6 @@ public class ConfigController implements Initializable {
                 System.out.println("File exists.");
                 comboList.add("Custom Config");
 
-                Database.getInstance().getConfigDatabase(directoryPath);
                 Config config = Database.getInstance().getConfig();
                 if (config.SELECTED_LANGUAGE.toString().equals("C")){
                     fillTextFields(config.COMPILER_PATH,config.ARGS,true,config.RUN_COMMAND);

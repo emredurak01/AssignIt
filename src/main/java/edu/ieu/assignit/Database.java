@@ -33,15 +33,7 @@ public class Database {
             Application.createAlert(e.getMessage(), "Error");
         }
     }
-    public void getConfigDatabase(String path) throws  SQLException {
-        this.path = path;
-        try {
-            Class.forName("org.sqlite.JDBC");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        connection = DriverManager.getConnection("jdbc:sqlite:" + path);
-    }
+
 
     public void addConfig(String compilerPath, String args, String expected, String runCommand, String selectedLanguage) throws SQLException {
         String sql = "INSERT INTO config_table (COMPILER_PATH, ARGS, EXPECTED, RUN_COMMAND, SELECTED_LANGUAGE) VALUES (?, ?, ?, ?, ?)";
@@ -61,6 +53,9 @@ public class Database {
         Config config = Config.getInstance();
 
         String sql = "SELECT COMPILER_PATH, ARGS, EXPECTED, RUN_COMMAND, SELECTED_LANGUAGE FROM config_table WHERE ID = 1";
+        if (connection == null){
+            createAssignmentConfig(config.ASSIGNMENT_PATH);
+        }
         Statement stat = connection.createStatement();
         ResultSet rs = stat.executeQuery(sql);
 
