@@ -40,6 +40,8 @@ public class ConfigController implements Initializable {
     @FXML
     private MFXButton saveButton;
     @FXML
+    private MFXButton deleteButton;
+    @FXML
     private MFXButton runButton;
     private boolean doNotAffectConfig = false;
     @Override
@@ -114,6 +116,21 @@ public class ConfigController implements Initializable {
                     Config.getInstance().SELECTED_LANGUAGE = Language.HASKELL;
                     fillTextFields(directoryString, HaskellCompiler.COMPILER_PATH, HaskellCompiler.ARGS, true, HaskellCompiler.RUN_COMMAND);
                 }
+            }
+        });
+
+        deleteButton.setOnAction(actionEvent -> {
+            String filePath = selectedDirectoryPath + File.separator + "config.assignit";
+            File file = new File(filePath);
+            if (file.exists()) {
+                boolean deleted = file.delete();
+                if (deleted) {
+                    Application.createAlert("Configuration deleted successfully.", "Success");
+                } else {
+                    Application.createAlert("Failed to delete the configuration.", "Error");
+                }
+            } else {
+                Application.createAlert("Configuration could not be found.", "Error");
             }
         });
 

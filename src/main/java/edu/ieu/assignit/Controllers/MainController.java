@@ -22,7 +22,7 @@ public class MainController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         createNewButton.setOnAction(actionEvent -> {
             try {
-                Application.changeScene("fxml/config.fxml", 300, 520);
+                Application.changeScene("fxml/config.fxml", 300, 560);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
