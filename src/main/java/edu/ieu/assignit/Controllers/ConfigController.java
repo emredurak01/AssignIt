@@ -122,7 +122,7 @@ public class ConfigController implements Initializable {
         runField.setVisible(runFieldBool);
         runField.setManaged(runFieldBool);
         runField.setText(runFieldParam);
-        expected.setText("");
+        expected.setText(Config.getInstance().EXPECTED);
     }
 
     private void importConfig(StringBuilder selectedDirectoryPath, ObservableList<String> comboList) throws SQLException {
@@ -147,29 +147,30 @@ public class ConfigController implements Initializable {
                 // TODO: use switch and get rid of duplicate code
                 Database.getInstance().connect(selectedDirectoryPath + "/config.assignit");
                 Config config = Database.getInstance().getConfig();
-                Config.getInstance().COMPILER_PATH = config.COMPILER_PATH;
-                Config.getInstance().ASSIGNMENT_PATH = config.ASSIGNMENT_PATH;
-                Config.getInstance().ARGS = config.ARGS;
-                Config.getInstance().RUN_COMMAND = config.RUN_COMMAND;
-                Config.getInstance().EXPECTED = config.EXPECTED;
                 Database.getInstance().disconnect();
                 if (config.SELECTED_LANGUAGE.toString().equals("C")) {
                     configComboBox.getSelectionModel().selectIndex(1);
+                    Config.setInstance(config); // assign current config to the imported config because it is affected by the onChange event of configCombobox
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
                 } else if (config.SELECTED_LANGUAGE.toString().equals("JAVA")) {
                     configComboBox.getSelectionModel().selectIndex(5);
+                    Config.setInstance(config);
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
                 } else if (config.SELECTED_LANGUAGE.toString().equals("HASKELL")) {
                     configComboBox.getSelectionModel().selectIndex(6);
+                    Config.setInstance(config);
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
                 } else if (config.SELECTED_LANGUAGE.toString().equals("PYTHON")) {
                     configComboBox.getSelectionModel().selectIndex(2);
+                    Config.setInstance(config);
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
                 } else if (config.SELECTED_LANGUAGE.toString().equals("LISP")) {
                     configComboBox.getSelectionModel().selectIndex(3);
+                    Config.setInstance(config);
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
                 } else if (config.SELECTED_LANGUAGE.toString().equals("SCHEME")) {
                     configComboBox.getSelectionModel().selectIndex(4);
+                    Config.setInstance(config);
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
                 }
             } else {

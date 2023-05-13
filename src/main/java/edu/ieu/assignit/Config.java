@@ -16,4 +16,11 @@ public class Config {
         }
         return instance;
     }
+    public static void setInstance(Config config) {
+        Config.getInstance().COMPILER_PATH = config.COMPILER_PATH;
+        Config.getInstance().ASSIGNMENT_PATH = config.ASSIGNMENT_PATH;
+        Config.getInstance().ARGS = config.ARGS;
+        Config.getInstance().RUN_COMMAND = config.RUN_COMMAND;
+        Config.getInstance().EXPECTED = config.EXPECTED;
+    }
 }
