@@ -41,7 +41,6 @@ public class ConfigController implements Initializable {
     private MFXButton saveButton;
     @FXML
     private MFXButton runButton;
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -132,31 +131,47 @@ public class ConfigController implements Initializable {
         File selectedDirectory = directoryChooser.showDialog(primaryStage);
 
         if (selectedDirectory != null) {
-            String directoryPath = selectedDirectory.getAbsolutePath();
+            String directoryPath = selectedDirectory.getPath();
             assignmentPath.setText(directoryPath);
             assignmentPath.appendText("");
             assignmentPath.end();
             selectedDirectoryPath.setLength(0);
-            selectedDirectoryPath.append(selectedDirectory.getName());
+            selectedDirectoryPath.append(selectedDirectory.getPath());
 
             File directory = new File(directoryPath);
             File file = new File(directory, "config.assignit");
 
             if (file.exists()) {
                 System.out.println("File exists.");
-                comboList.add("Custom Config");
 
-                // TODO: there are other languages that require run_command
+                // TODO: use switch and get rid of duplicate code
                 Database.getInstance().connect(selectedDirectoryPath + "/config.assignit");
                 Config config = Database.getInstance().getConfig();
+                Config.getInstance().COMPILER_PATH = config.COMPILER_PATH;
+                Config.getInstance().ASSIGNMENT_PATH = config.ASSIGNMENT_PATH;
+                Config.getInstance().ARGS = config.ARGS;
+                Config.getInstance().RUN_COMMAND = config.RUN_COMMAND;
+                Config.getInstance().EXPECTED = config.EXPECTED;
                 Database.getInstance().disconnect();
                 if (config.SELECTED_LANGUAGE.toString().equals("C")) {
+                    configComboBox.getSelectionModel().selectIndex(1);
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
-                } else {
+                } else if (config.SELECTED_LANGUAGE.toString().equals("JAVA")) {
+                    configComboBox.getSelectionModel().selectIndex(5);
+                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
+                } else if (config.SELECTED_LANGUAGE.toString().equals("HASKELL")) {
+                    configComboBox.getSelectionModel().selectIndex(6);
+                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
+                } else if (config.SELECTED_LANGUAGE.toString().equals("PYTHON")) {
+                    configComboBox.getSelectionModel().selectIndex(2);
                     fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
-
+                } else if (config.SELECTED_LANGUAGE.toString().equals("LISP")) {
+                    configComboBox.getSelectionModel().selectIndex(3);
+                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
+                } else if (config.SELECTED_LANGUAGE.toString().equals("SCHEME")) {
+                    configComboBox.getSelectionModel().selectIndex(4);
+                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
                 }
-
             } else {
                 System.out.println("File does not exist.");
             }
