@@ -16,11 +16,12 @@ public class Config {
         }
         return instance;
     }
-    public static void setInstance(Config config) {
-        Config.getInstance().COMPILER_PATH = config.COMPILER_PATH;
-        Config.getInstance().ASSIGNMENT_PATH = config.ASSIGNMENT_PATH;
-        Config.getInstance().ARGS = config.ARGS;
-        Config.getInstance().RUN_COMMAND = config.RUN_COMMAND;
-        Config.getInstance().EXPECTED = config.EXPECTED;
+    // for test purposes
+    public static void display() {
+        System.out.println("COMPILER_PATH: " + Config.getInstance().COMPILER_PATH);
+        System.out.println("ASSIGNMENT_PATH: " + Config.getInstance().ASSIGNMENT_PATH);
+        System.out.println("ARGS: " + Config.getInstance().ARGS);
+        System.out.println("EXPECTED: " + Config.getInstance().EXPECTED);
+        System.out.println("RUN_COMMAND: " + Config.getInstance().RUN_COMMAND);
     }
 }
