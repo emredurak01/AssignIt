@@ -15,10 +15,4 @@ public class JavaCompiler extends Compiler {
     public JavaCompiler(File workingDirectory) {
         super(workingDirectory);
     }
-
-    @Override
-    public Result compile(String path, String args) throws Exception {
-        super.compile(path, args);
-        return super.run(RUN_COMMAND);
-    }
 }

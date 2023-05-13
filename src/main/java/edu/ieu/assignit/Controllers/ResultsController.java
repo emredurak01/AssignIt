@@ -1,10 +1,7 @@
 package edu.ieu.assignit.Controllers;
 
 import edu.ieu.assignit.Application;
-import edu.ieu.assignit.Compilers.CCompiler;
-import edu.ieu.assignit.Compilers.Compiler;
-import edu.ieu.assignit.Compilers.LispCompiler;
-import edu.ieu.assignit.Compilers.PythonCompiler;
+import edu.ieu.assignit.Compilers.*;
 import edu.ieu.assignit.Config;
 import edu.ieu.assignit.Result;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -56,14 +53,25 @@ public class ResultsController implements Initializable {
             for (File file : submissions) {
                 if (!file.isFile()) { // if it is directory
                     System.out.println(file.getName() + " is working directory for compiling");
-                    Compiler compiler;
+                    edu.ieu.assignit.Compilers.Compiler compiler;
                     switch (Config.getInstance().SELECTED_LANGUAGE) {
                         case C -> compiler = new CCompiler(file);
                         case PYTHON -> compiler = new PythonCompiler(file);
                         case LISP -> compiler = new LispCompiler(file);
+                        case HASKELL -> compiler = new HaskellCompiler(file);
+                        case SCHEME -> compiler = new SchemeCompiler(file);
+                    case JAVA -> compiler = new JavaCompiler(file);
                         default -> compiler = new CCompiler(file);
                     }
-                    Result result = compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
+                    Result result = null;
+                    if (compiler instanceof JavaCompiler ||
+                        compiler instanceof HaskellCompiler ||
+                        compiler instanceof CCompiler) {
+                        compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
+                        result = compiler.run(Config.getInstance().RUN_COMMAND);
+                    } else {
+                        result = compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
+                    }
                     System.out.println(Config.getInstance().COMPILER_PATH + " " + Config.getInstance().ARGS);
                     System.out.println("status: " + result.getStatus());
                     System.out.println("output: " + result.getOutput());
@@ -169,7 +177,7 @@ public class ResultsController implements Initializable {
             Application.createAlert("Output: \n" + selectedSubmission.getOutput() + "\n" +
                     "Status: " + selectedSubmission.getStatus() + "\n" +
                     "Expected Value: " + selectedSubmission.getExpectedValue() + "\n" +
-                    "Error: \n" + selectedSubmission.getError(),"Submission Details");
+                                    (selectedSubmission.getError().isEmpty()?"":"Error: \n" + selectedSubmission.getError()),"Submission Details");
 
         }
 

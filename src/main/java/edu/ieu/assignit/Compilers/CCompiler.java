@@ -15,9 +15,4 @@ public class CCompiler extends Compiler {
     public CCompiler(File workingDirectory) {
         super(workingDirectory);
     }
-    @Override
-    public Result compile(String path, String args) throws Exception {
-        super.compile(path, args);
-        return super.run(RUN_COMMAND);
-    }
 }
