@@ -37,7 +37,7 @@
                 <Insets right="-33.0" />
             </padding>
         </HBox>
-        <MFXTextField fx:id="compilerPath" floatingText="Compiler Path" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
+        <MFXTextField fx:id="compilerPath" floatingText="Compiler / Interpreter Path" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
         <MFXTextField fx:id="args" floatingText="Arguments" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
         <MFXTextField fx:id="runField" floatingText="Run command" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
         <MFXTextField fx:id="expected" floatingText="Expected outcome" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />

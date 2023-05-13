@@ -56,6 +56,7 @@ public class ConfigController implements Initializable {
                 Config.getInstance().COMPILER_PATH = compilerPath.getText();
                 Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
                 Config.getInstance().ARGS = args.getText();
+                Config.getInstance().RUN_COMMAND = runField.getText();
                 Config.getInstance().EXPECTED = expected.getText();
 
                 ZipExtractor zipExtractor = new ZipExtractor();
