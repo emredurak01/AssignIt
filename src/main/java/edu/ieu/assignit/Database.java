@@ -22,7 +22,7 @@ public class Database {
     public void createAssignmentConfig() throws SQLException {
         try {
             Statement stat = connection.createStatement();
-            stat.executeUpdate("CREATE TABLE if not exists config_table (ID INTEGER PRIMARY KEY AUTOINCREMENT,COMPILER_PATH varchar(255), ARGS varchar(255),EXPECTED varchar(255),RUN_COMMAND varchar(255),SELECTED_LANGUAGE varchar(255));");
+            stat.executeUpdate("CREATE TABLE if not exists config_table (ID INTEGER PRIMARY KEY,COMPILER_PATH varchar(255), ARGS varchar(255),EXPECTED varchar(255),RUN_COMMAND varchar(255),SELECTED_LANGUAGE varchar(255));");
             stat.close();
 
         } catch (SQLException e) {
@@ -44,16 +44,21 @@ public class Database {
 
 
     public void addConfig(String compilerPath, String args, String expected, String runCommand, String selectedLanguage) throws SQLException {
-        String sql = "INSERT INTO config_table (COMPILER_PATH, ARGS, EXPECTED, RUN_COMMAND, SELECTED_LANGUAGE) VALUES (?, ?, ?, ?, ?)";
+        String sql0 = "DELETE FROM config_table;";
+        PreparedStatement ps0 = connection.prepareStatement(sql0); // reset table
+        ps0.executeUpdate();
+        ps0.close();
+        String sql = "INSERT INTO config_table (ID, COMPILER_PATH, ARGS, EXPECTED, RUN_COMMAND, SELECTED_LANGUAGE) VALUES (?, ?, ?, ?, ?, ?)";
         PreparedStatement ps = connection.prepareStatement(sql);
         // id will always be 1,
         // since there will be only one config in every assignment.
         // So, is id field necessary for this simple task?
-        ps.setString(1, compilerPath);
-        ps.setString(2, args);
-        ps.setString(3, expected);
-        ps.setString(4, runCommand);
-        ps.setString(5, selectedLanguage);
+        ps.setInt(1, 1);
+        ps.setString(2, compilerPath);
+        ps.setString(3, args);
+        ps.setString(4, expected);
+        ps.setString(5, runCommand);
+        ps.setString(6, selectedLanguage);
         ps.executeUpdate();
         ps.close();
     }

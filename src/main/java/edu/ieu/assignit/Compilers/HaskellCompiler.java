@@ -15,9 +15,9 @@ public class HaskellCompiler extends Compiler {
     public HaskellCompiler(File workingDirectory) {
         super(workingDirectory);
     }
-
     @Override
     public Result compile(String path, String args) throws Exception {
-        return super.compile(path, args);
+        super.compile(path, args);
+        return super.run(RUN_COMMAND);
     }
 }

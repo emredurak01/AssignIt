@@ -74,7 +74,7 @@ public class ResultsController implements Initializable {
                     String resultString;
                     if (result.getOutput() == null) {
                         resultString = "Incorrect";
-                    } else if (result.getOutput().equals(Config.getInstance().EXPECTED)) {
+                    } else if (result.getOutput().trim().equals(Config.getInstance().EXPECTED.trim())) {
                         resultString = "Correct";
 
                     } else {

@@ -29,6 +29,24 @@ public abstract class Compiler {
         return result;
     }
 
+    public Result run(String command) throws Exception {
+        Process process = Runtime.getRuntime().exec(command, null, workingDirectory);
+        process.waitFor();
+        BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+        BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+        StringBuilder outputBuilder = new StringBuilder();
+        StringBuilder errorBuilder = new StringBuilder();
+        String line;
+        while ((line = reader.readLine()) != null) {
+            outputBuilder.append(line).append("\n");
+        }
+        while ((line = errorReader.readLine()) != null) {
+            errorBuilder.append(line).append("\n");
+        }
+        Result result = new Result(outputBuilder.toString(), process.exitValue(), errorBuilder.toString());
+        return result;
+    }
+
 
     public File getWorkingDirectory() {
         return workingDirectory;

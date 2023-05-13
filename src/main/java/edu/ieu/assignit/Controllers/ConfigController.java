@@ -43,7 +43,6 @@ public class ConfigController implements Initializable {
     private MFXButton deleteButton;
     @FXML
     private MFXButton runButton;
-    private boolean doNotAffectConfig = false;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -52,7 +51,6 @@ public class ConfigController implements Initializable {
         configComboBox.setItems(comboList);
         configComboBox.getSelectionModel().selectFirst();
 
-        Config.getInstance().SELECTED_LANGUAGE = Language.GENERIC; // reset the language
         runButton.setOnAction(actionEvent -> {
             try {
                 Config.getInstance().COMPILER_PATH = compilerPath.getText();
@@ -90,9 +88,6 @@ public class ConfigController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 String comboBoxValue = configComboBox.getValue();
                 String directoryString = selectedDirectoryPath.toString();
-                if (doNotAffectConfig) {
-                    return;
-                }
                 if (comboBoxValue == null) {
                 } else if (comboBoxValue.equals("Generic")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.GENERIC;
@@ -168,30 +163,36 @@ public class ConfigController implements Initializable {
                 // TODO: use switch and get rid of duplicate code
                 Database.getInstance().connect(selectedDirectoryPath + "/config.assignit");
                 Config config = Database.getInstance().getConfig();
+                Language SELECTED_LANGUAGE = config.SELECTED_LANGUAGE;
                 config.ASSIGNMENT_PATH = selectedDirectoryPath.toString();
+                String COMPILER_PATH = config.COMPILER_PATH;
+                String ARGS = config.ARGS;
+                String RUN_COMMAND = config.RUN_COMMAND;
                 Config.display();
                 Database.getInstance().disconnect();
-                doNotAffectConfig = true;
-                if (config.SELECTED_LANGUAGE.toString().equals("C")) {
+                if (SELECTED_LANGUAGE.toString().equals("C")) {
                     configComboBox.getSelectionModel().selectIndex(1);
-                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
-                } else if (config.SELECTED_LANGUAGE.toString().equals("JAVA")) {
+                } else if (SELECTED_LANGUAGE.toString().equals("JAVA")) {
                     configComboBox.getSelectionModel().selectIndex(5);
-                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
-                } else if (config.SELECTED_LANGUAGE.toString().equals("HASKELL")) {
+                } else if (SELECTED_LANGUAGE.toString().equals("HASKELL")) {
                     configComboBox.getSelectionModel().selectIndex(6);
-                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, true, config.RUN_COMMAND);
-                } else if (config.SELECTED_LANGUAGE.toString().equals("PYTHON")) {
+                } else if (SELECTED_LANGUAGE.toString().equals("PYTHON")) {
                     configComboBox.getSelectionModel().selectIndex(2);
-                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
-                } else if (config.SELECTED_LANGUAGE.toString().equals("LISP")) {
+                } else if (SELECTED_LANGUAGE.toString().equals("LISP")) {
                     configComboBox.getSelectionModel().selectIndex(3);
-                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
-                } else if (config.SELECTED_LANGUAGE.toString().equals("SCHEME")) {
+                } else if (SELECTED_LANGUAGE.toString().equals("SCHEME")) {
                     configComboBox.getSelectionModel().selectIndex(4);
-                    fillTextFields(selectedDirectoryPath.toString(), config.COMPILER_PATH, config.ARGS, false, "");
                 }
-                doNotAffectConfig = false;
+                config.SELECTED_LANGUAGE = SELECTED_LANGUAGE;
+                config.COMPILER_PATH = COMPILER_PATH;
+                config.ARGS = ARGS;
+                config.RUN_COMMAND = RUN_COMMAND;
+                if (RUN_COMMAND == null) {
+                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, false, "");
+                } else {
+                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, true, RUN_COMMAND);
+                }
+                
             } else {
                 System.out.println("File does not exist.");
             }
