@@ -50,7 +50,30 @@ public class ConfigController implements Initializable {
         comboList.addAll("Generic", "C", "Python", "Emacs Lisp", "Scheme", "Java", "Haskell");
         configComboBox.setItems(comboList);
         configComboBox.getSelectionModel().selectFirst();
-
+        if (Config.getInstance().COMPILER_PATH != null) {
+            compilerPath.setText(Config.getInstance().COMPILER_PATH);
+            assignmentPath.setText(Config.getInstance().ASSIGNMENT_PATH);
+            args.setText(Config.getInstance().ARGS);
+            runField.setText(Config.getInstance().RUN_COMMAND);
+            expected.setText(Config.getInstance().EXPECTED);
+            Language SELECTED_LANGUAGE = Config.getInstance().SELECTED_LANGUAGE;
+            if (SELECTED_LANGUAGE == null) {  
+            } else if (SELECTED_LANGUAGE.toString().equals("C")) {
+                configComboBox.getSelectionModel().selectIndex(1);
+            } else if (SELECTED_LANGUAGE.toString().equals("JAVA")) {
+                configComboBox.getSelectionModel().selectIndex(5);
+            } else if (SELECTED_LANGUAGE.toString().equals("HASKELL")) {
+                configComboBox.getSelectionModel().selectIndex(6);
+            } else if (SELECTED_LANGUAGE.toString().equals("PYTHON")) {
+                configComboBox.getSelectionModel().selectIndex(2);
+            } else if (SELECTED_LANGUAGE.toString().equals("LISP")) {
+                configComboBox.getSelectionModel().selectIndex(3);
+            } else if (SELECTED_LANGUAGE.toString().equals("SCHEME")) {
+                configComboBox.getSelectionModel().selectIndex(4);
+            }
+        }
+        System.out.println("after config init");
+        Config.display();
         runButton.setOnAction(actionEvent -> {
             try {
                 Config.getInstance().COMPILER_PATH = compilerPath.getText();
@@ -88,7 +111,7 @@ public class ConfigController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
                 String comboBoxValue = configComboBox.getValue();
-                String directoryString = selectedDirectoryPath.toString();
+                String directoryString = Config.getInstance().ASSIGNMENT_PATH;
                 if (comboBoxValue == null) {
                 } else if (comboBoxValue.equals("Generic")) {
                     Config.getInstance().SELECTED_LANGUAGE = Language.GENERIC;
@@ -169,6 +192,7 @@ public class ConfigController implements Initializable {
                 String COMPILER_PATH = config.COMPILER_PATH;
                 String ARGS = config.ARGS;
                 String RUN_COMMAND = config.RUN_COMMAND;
+                System.out.println("after import");
                 Config.display();
                 Database.getInstance().disconnect();
                 if (SELECTED_LANGUAGE.toString().equals("C")) {
