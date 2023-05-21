@@ -10,6 +10,7 @@ import io.github.palexdev.materialfx.enums.ScrimPriority;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -31,10 +32,8 @@ public class Application extends javafx.application.Application {
         MFXGenericDialog dialogContent = MFXGenericDialogBuilder.build().setContentText(content).get();
         MFXStageDialog dialog = MFXGenericDialogBuilder.build(dialogContent).toStageDialogBuilder().initModality(Modality.APPLICATION_MODAL).setDraggable(true).setTitle("Dialog").setScrimPriority(ScrimPriority.WINDOW).setScrimOwner(true).get();
 
-        dialogContent.setMaxSize(600, 600);
+        dialogContent.setMaxSize(1000, 600);
 
-        //MFXFontIcon infoIcon = new MFXFontIcon("", 18);
-        //dialogContent.setHeaderIcon(infoIcon);
 
         dialogContent.setHeaderText(header);
         dialog.showDialog();
