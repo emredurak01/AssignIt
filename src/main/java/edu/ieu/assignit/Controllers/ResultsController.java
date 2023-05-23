@@ -2,6 +2,7 @@ package edu.ieu.assignit.Controllers;
 
 import edu.ieu.assignit.Application;
 import edu.ieu.assignit.Compilers.*;
+import edu.ieu.assignit.Compilers.Compiler;
 import edu.ieu.assignit.Config;
 import edu.ieu.assignit.Result;
 import io.github.palexdev.materialfx.controls.MFXButton;
@@ -14,7 +15,6 @@ import io.github.palexdev.materialfx.filter.StringFilter;
 import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,8 +23,6 @@ import javafx.stage.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.ScrollPane;
-
-
 
 import javafx.beans.value.*;
 
@@ -48,93 +46,117 @@ public class ResultsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        try {
-            File[] submissions = new File(Config.getInstance().ASSIGNMENT_PATH).listFiles();
-            for (File file : submissions) {
-                if (!file.isFile()) { // if it is directory
-                    System.out.println(file.getName() + " is working directory for compiling");
-                    edu.ieu.assignit.Compilers.Compiler compiler;
-                    switch (Config.getInstance().SELECTED_LANGUAGE) {
-                        case C -> compiler = new CCompiler(file);
-                        case PYTHON -> compiler = new PythonCompiler(file);
-                        case LISP -> compiler = new LispCompiler(file);
-                        case HASKELL -> compiler = new HaskellCompiler(file);
-                        case SCHEME -> compiler = new SchemeCompiler(file);
-                    case JAVA -> compiler = new JavaCompiler(file);
-                        default -> compiler = new CCompiler(file);
+        File f = new File(Config.getInstance().ASSIGNMENT_PATH + "/results.txt");
+        if (f.exists()) {
+            // TODO: import results from results.txt into the table
+            // importResultsFromFile(f);
+        } else {
+            try {
+                File[] submissions = new File(Config.getInstance().ASSIGNMENT_PATH).listFiles();
+                for (File file : submissions) {
+                    if (!file.isFile()) { // if it is a directory
+                        System.out.println(file.getName() + " is working directory for compiling");
+                        Compiler compiler;
+                        switch (Config.getInstance().SELECTED_LANGUAGE) {
+                        case C:
+                            compiler = new CCompiler(file);
+                            break;
+                        case PYTHON:
+                            compiler = new PythonCompiler(file);
+                            break;
+                        case LISP:
+                            compiler = new LispCompiler(file);
+                            break;
+                        case HASKELL:
+                            compiler = new HaskellCompiler(file);
+                            break;
+                        case SCHEME:
+                            compiler = new SchemeCompiler(file);
+                            break;
+                        case JAVA:
+                            compiler = new JavaCompiler(file);
+                            break;
+                        default:
+                            compiler = new CCompiler(file);
+                            break;
+                        }
+                        Result result;
+                        if (compiler instanceof JavaCompiler ||
+                            compiler instanceof HaskellCompiler ||
+                            compiler instanceof CCompiler) {
+                            compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
+                            result = compiler.run(Config.getInstance().RUN_COMMAND);
+                        } else {
+                            result = compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
+                        }
+                        System.out.println(Config.getInstance().COMPILER_PATH + " " + Config.getInstance().ARGS);
+                        System.out.println("status: " + result.getStatus());
+                        System.out.println("output: " + result.getOutput());
+                        System.out.println("error: " + result.getError());
+                        System.out.println("expected: " + Config.getInstance().EXPECTED);
+                        // check results
+                        String isError;
+                        String resultString;
+                        if (result.getOutput() == null) {
+                            resultString = "Incorrect";
+                        } else if (result.getOutput().trim().equals(Config.getInstance().EXPECTED.trim())) {
+                            resultString = "Correct";
+                        } else {
+                            resultString = "Incorrect";
+                        }
+                        if (result.getError() == null) {
+                            isError = "None";
+                        } else {
+                            isError = result.getError();
+                        }
+                        Submission submission = new Submission(file.getName(), result.getOutput(), resultString, result.getStatus(), isError, Config.getInstance().EXPECTED);
+                        this.submissions.add(submission);
                     }
-                    Result result = null;
-                    if (compiler instanceof JavaCompiler ||
-                        compiler instanceof HaskellCompiler ||
-                        compiler instanceof CCompiler) {
-                        compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
-                        result = compiler.run(Config.getInstance().RUN_COMMAND);
-                    } else {
-                        result = compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
-                    }
-                    System.out.println(Config.getInstance().COMPILER_PATH + " " + Config.getInstance().ARGS);
-                    System.out.println("status: " + result.getStatus());
-                    System.out.println("output: " + result.getOutput());
-                    System.out.println("error: " + result.getError());
-                    System.out.println("expected: " + Config.getInstance().EXPECTED);
-                    // check results
-                    String isError;
-                    String resultString;
-                    if (result.getOutput() == null) {
-                        resultString = "Incorrect";
-                    } else if (result.getOutput().trim().equals(Config.getInstance().EXPECTED.trim())) {
-                        resultString = "Correct";
-
-                    } else {
-                        resultString = "Incorrect";
-                    }
-                    if (result.getError() == null) {
-                        isError = "None";
-                    } else {
-                        isError = result.getError();
-                    }
-                    Submission submission = new Submission(file.getName(), result.getOutput(), resultString, result.getStatus(), isError, Config.getInstance().EXPECTED);
-                    this.submissions.add(submission);
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
+                Application.createAlert(e.getMessage(), "Error");
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-            Application.createAlert(e.getMessage(), "Error");
+            exportTableToFile(f);
+            setupTable();
         }
-        setupTable();
 
         backButton.setOnAction(actionEvent -> {
-            try {
-                Application.changeScene("fxml/config.fxml",
-                        300,
-                        560);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
+                try {
+                    Application.changeScene("fxml/config.fxml",
+                                            300,
+                                            560);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
     }
 
-    // TODO: fill the in-loop
-    private void exportPassedStudents() {
-        FileChooser fileChooser = new FileChooser();
-        File selectedFile = fileChooser.showSaveDialog(primaryStage);
-        if (selectedFile != null) {
-            try (PrintWriter writer = new PrintWriter(selectedFile)) {
-                // write the submission IDs with "correct" result
-                for (Submission submission : table.getItems()) {
-                    if (submission.getResult().equals("Correct")) {
-                        for (MFXTableColumn<Submission> column : table.getTableColumns()) {
-                        }
-                        // writer.println();
-                    }
-                }
-
-                Application.createAlert("Passed students are exported to the file", "success");
-            } catch (IOException ex) {
-                Application.createAlert("Error exporting students: " + ex.getMessage(), "error");
+    private void importResultsFromFile(File file) {
+        try (Scanner scanner = new Scanner(file)) {
+            while (scanner.hasNext()) {
+                // since strings between commas can have multiple lines, using nextLine should be avoided
+                // the import code should parse values between , character until the $ character.
             }
-        } else {
-            Application.createAlert("Selected file is null", "error");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            Application.createAlert("Error importing results: " + e.getMessage(), "Error");
+        }
+    }
+
+
+    // if there is results.txt in assignment folder, the program does not compile!
+    private void exportTableToFile(File file) {
+        try (PrintWriter writer = new PrintWriter(file)) {
+            for (Submission submission : submissions) {
+                writer.println(submission.getId() + "," + submission.getOutput() + "," +
+                               submission.getResult() + "," + submission.getStatus() + "," +
+                               submission.getError() + "," + submission.getExpectedValue() + "$"); // $ indicates the submission's end position
+            }
+            // success
+        } catch (IOException e) {
+            e.printStackTrace();
+            // Application.createAlert("Error exporting table: " + e.getMessage(), "Error");
         }
     }
 
@@ -155,16 +177,15 @@ public class ResultsController implements Initializable {
         table.setItems(submissions);
 
         table.getFilters().addAll(
-                new StringFilter<>("ID", Submission::getId),
-                new StringFilter<>("Output", Submission::getOutput), //details
-                new StringFilter<>("Expected Value", Submission::getExpectedValue),
-                new StringFilter<>("Result", Submission::getResult),
-                new IntegerFilter<>("Status", Submission::getStatus),
-                new StringFilter<>("Error", Submission::getError) //details
-        );
+                                  new StringFilter<>("ID", Submission::getId),
+                                  new StringFilter<>("Output", Submission::getOutput), //details
+                                  new StringFilter<>("Expected Value", Submission::getExpectedValue),
+                                  new StringFilter<>("Result", Submission::getResult),
+                                  new IntegerFilter<>("Status", Submission::getStatus),
+                                  new StringFilter<>("Error", Submission::getError) //details
+                                  );
 
         detailsButton.setOnAction(actionEvent -> handleRowSelection());
-
     }
 
     private void handleRowSelection() {
@@ -175,11 +196,10 @@ public class ResultsController implements Initializable {
             Submission selectedSubmission = submissionsList.iterator().next();
 
             Application.createAlert("Output: \n" + selectedSubmission.getOutput() + "\n" +
-                    "Status: " + selectedSubmission.getStatus() + "\n" +
-                    "Expected Value: " + selectedSubmission.getExpectedValue() + "\n" +
-                                    (selectedSubmission.getError().isEmpty()?"":"Error: \n" + selectedSubmission.getError()),"Submission Details");
+                                    "Status: " + selectedSubmission.getStatus() + "\n" +
+                                    "Expected Value: " + selectedSubmission.getExpectedValue() + "\n" +
+                                    (selectedSubmission.getError().isEmpty() ? "" : "Error: \n" + selectedSubmission.getError()), "Submission Details");
 
         }
-
     }
 }
