@@ -17,8 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 import static edu.ieu.assignit.Application.primaryStage;
 
@@ -212,10 +211,11 @@ public class ConfigController implements Initializable {
                 config.COMPILER_PATH = COMPILER_PATH;
                 config.ARGS = ARGS;
                 config.RUN_COMMAND = RUN_COMMAND;
-                if (RUN_COMMAND == null) {
-                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, false, "");
+                final Set<String> LANGUAGE_WITH_RUN = new HashSet<>(Arrays.asList("C", "JAVA", "HASKELL"));
+                if (LANGUAGE_WITH_RUN.contains(config.SELECTED_LANGUAGE.toString())) {
+                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, true, "");
                 } else {
-                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, true, RUN_COMMAND);
+                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, false, RUN_COMMAND);
                 }
                 
             } else {

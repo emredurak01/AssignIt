@@ -12,14 +12,14 @@
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
     <children>
-        <MFXComboBox id="customNCombo" fx:id="configComboBox" allowEdit="false" editable="false" floatingText="Selected Language" prefWidth="154.0" styleClass="mfx-combo-box" stylesheets="@../css/comboboxes.css">
+        <MFXComboBox id="customNCombo" fx:id="configComboBox" allowEdit="false" editable="false" floatingText="Selected Language" prefWidth="200.0" styleClass="mfx-combo-box" stylesheets="@../css/comboboxes.css">
             <VBox.margin>
                 <Insets />
             </VBox.margin>
         </MFXComboBox>
         <HBox alignment="CENTER" maxHeight="100.0" prefHeight="41.0" prefWidth="272.0" VBox.vgrow="NEVER">
             <children>
-                <MFXTextField fx:id="assignmentPath" alignment="CENTER" floatingText="Assignment Path" floatingTextGap="0.0" prefHeight="46.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" HBox.hgrow="NEVER">
+                <MFXTextField fx:id="assignmentPath" alignment="CENTER" floatingText="Assignment Path" floatingTextGap="0.0" prefHeight="46.0" prefWidth="205.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" HBox.hgrow="NEVER">
                     <HBox.margin>
                         <Insets />
                     </HBox.margin>
@@ -37,12 +37,12 @@
                 <Insets right="-33.0" />
             </padding>
         </HBox>
-        <MFXTextField fx:id="compilerPath" floatingText="Compiler / Interpreter Path" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
-        <MFXTextField fx:id="args" floatingText="Arguments" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
-        <MFXTextField fx:id="runField" floatingText="Run command" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
-        <MFXTextField fx:id="expected" floatingText="Expected outcome" floatingTextGap="0.0" prefHeight="34.0" prefWidth="165.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
-        <MFXButton id="custom" fx:id="saveButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Save Configuration" />
-      <MFXButton id="custom" fx:id="deleteButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Delete Configuration" />
+        <MFXTextField fx:id="compilerPath" floatingText="Compiler / Interpreter Path" floatingTextGap="0.0" prefHeight="46.0" prefWidth="205.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
+        <MFXTextField fx:id="args" floatingText="Arguments" floatingTextGap="0.0" prefHeight="34.0" prefWidth="205.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
+        <MFXTextField fx:id="runField" floatingText="Run command" floatingTextGap="0.0" prefHeight="34.0" prefWidth="205.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
+        <MFXTextField fx:id="expected" floatingText="Expected outcome" floatingTextGap="0.0" prefHeight="34.0" prefWidth="205.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
+        <MFXButton id="custom" fx:id="saveButton" buttonType="RAISED" prefHeight="26.0" prefWidth="150.0" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Save Configuration" />
+      <MFXButton id="custom" fx:id="deleteButton" buttonType="RAISED" prefHeight="26.0" prefWidth="150.0" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Delete Configuration" />
         <MFXButton id="custom" fx:id="runButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Run" />
     </children>
 </VBox>
