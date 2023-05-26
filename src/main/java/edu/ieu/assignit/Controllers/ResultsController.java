@@ -42,6 +42,8 @@ public class ResultsController implements Initializable {
     private MFXButton backButton;
     @FXML
     private MFXButton detailsButton;
+    @FXML
+    private MFXButton recompileButton;
     private final ObservableList<Submission> submissions = FXCollections.observableArrayList();
 
     @Override
@@ -130,6 +132,10 @@ public class ResultsController implements Initializable {
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
+        });
+
+        recompileButton.setOnAction(actionEvent -> {
+            //TODO: Recompile
         });
     }
     private void importResultsFromFile(File file) {

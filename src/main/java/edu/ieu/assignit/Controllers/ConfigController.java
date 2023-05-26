@@ -42,8 +42,6 @@ public class ConfigController implements Initializable {
     private MFXButton deleteButton;
     @FXML
     private MFXButton runButton;
-    @FXML
-    private MFXButton recompileButton;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -159,10 +157,6 @@ public class ConfigController implements Initializable {
             } else {
                 Application.createAlert("Configuration could not be found.", "Error");
             }
-        });
-
-        recompileButton.setOnAction(actionEvent -> {
-            //TODO: Recompile
         });
 
     }

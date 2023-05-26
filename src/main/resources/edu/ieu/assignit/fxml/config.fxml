@@ -43,7 +43,6 @@
         <MFXTextField fx:id="expected" floatingText="Expected outcome" floatingTextGap="0.0" prefHeight="34.0" prefWidth="205.0" style="-fx-border-color: -mfx-charcoal;" styleClass="mfx-text-field" stylesheets="@../css/textfields.css" text="" />
         <MFXButton id="custom" fx:id="saveButton" buttonType="RAISED" prefHeight="26.0" prefWidth="150.0" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Save Configuration" />
       <MFXButton id="custom" fx:id="deleteButton" buttonType="RAISED" prefHeight="26.0" prefWidth="150.0" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Delete Configuration" />
-        <MFXButton id="custom" fx:id="recompileButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Recompile" />
       <MFXButton id="custom" fx:id="runButton" buttonType="RAISED" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Run" />
     </children>
 </VBox>

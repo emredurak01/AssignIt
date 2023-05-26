@@ -15,8 +15,9 @@
                 <HBox prefHeight="40.0" prefWidth="600.0">
                     <children>
                         <MFXButton id="custom" fx:id="backButton" buttonType="RAISED" prefHeight="30.0" prefWidth="65.0" styleClass="custom-button" stylesheets="@../css/buttons.css" text="&lt;" />
-                  <Pane prefHeight="27.0" prefWidth="470.0" />
-                  <MFXButton id="custom" fx:id="detailsButton" alignment="CENTER" buttonType="RAISED" prefHeight="30.0" prefWidth="65.0" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Details" />
+                  <Pane prefHeight="26.0" prefWidth="390.0" />
+                  <MFXButton id="custom" fx:id="recompileButton" alignment="CENTER" buttonType="RAISED" prefHeight="26.0" prefWidth="89.0" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Recompile" />
+                  <MFXButton id="custom" fx:id="detailsButton1" alignment="CENTER" buttonType="RAISED" prefHeight="30.0" prefWidth="65.0" styleClass="custom-button" stylesheets="@../css/buttons.css" text="Details" />
                     </children>
                     <VBox.margin>
                         <Insets />
