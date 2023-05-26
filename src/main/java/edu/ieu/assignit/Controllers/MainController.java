@@ -5,8 +5,6 @@ import io.github.palexdev.materialfx.controls.MFXButton;
 import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextArea;
 
 import java.io.IOException;
 import java.net.URL;
@@ -40,8 +38,6 @@ public class MainController implements Initializable {
                     "5. Viewing Results: Once the processing is complete, the software will display the results for each student, indicating whether their submission was successful or not. You can view these results within the software's interface, allowing you to assess the performance of each student's assignment. For outputs containing more than one line, all of them can be displayed by pressing the details button.\n\n" +
                     "6. Saving and Opening Projects: The software allows you to update or save the config of your projects for future reference. Use the 'Config' option in the File menu to save your current project. You can reopen projects later by selecting 'Open Project' and navigating to the saved project / assignment folder .If the Delete Configuration button is used, the config in that assignment project (in the folder) is deleted. If the Save Configuration button is used, the configuration in the assignment project (folder) is saved.\n\n" +
                     "7. Help and Support: If you need assistance or have any questions, refer to the Help menu. It provides access to the user manual, contact information for support, frequently asked questions, keyboard shortcuts, and other resources to aid you in using the software effectively.";
-
-
 
 
             Application.createAlert(helpContent, "Help");

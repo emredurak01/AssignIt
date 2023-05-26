@@ -62,6 +62,7 @@ public class Database {
         ps.executeUpdate();
         ps.close();
     }
+
     public Config getConfig() throws SQLException {
         Config config = Config.getInstance();
 

@@ -10,7 +10,6 @@ import io.github.palexdev.materialfx.enums.ScrimPriority;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -39,6 +38,10 @@ public class Application extends javafx.application.Application {
         dialog.showDialog();
     }
 
+    public static void main(String[] args) {
+        launch(args);
+    }
+
     @Override
     public void start(Stage stage) throws Exception {
         primaryStage = stage;
@@ -50,12 +53,9 @@ public class Application extends javafx.application.Application {
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
 
-       primaryStage.setTitle("AssignIt");
+        primaryStage.setTitle("AssignIt");
         primaryStage.setWidth(250);
         primaryStage.setHeight(250);
         primaryStage.show();
-    }
-    public static void main(String[] args) {
-        launch(args);
     }
 }

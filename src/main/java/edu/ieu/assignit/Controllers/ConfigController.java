@@ -14,7 +14,6 @@ import javafx.fxml.Initializable;
 import javafx.stage.DirectoryChooser;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
@@ -42,6 +41,7 @@ public class ConfigController implements Initializable {
     private MFXButton deleteButton;
     @FXML
     private MFXButton runButton;
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
@@ -56,7 +56,7 @@ public class ConfigController implements Initializable {
             runField.setText(Config.getInstance().RUN_COMMAND);
             expected.setText(Config.getInstance().EXPECTED);
             Language SELECTED_LANGUAGE = Config.getInstance().SELECTED_LANGUAGE;
-            if (SELECTED_LANGUAGE == null) {  
+            if (SELECTED_LANGUAGE == null) {
             } else if (SELECTED_LANGUAGE.toString().equals("C")) {
                 configComboBox.getSelectionModel().selectIndex(1);
             } else if (SELECTED_LANGUAGE.toString().equals("JAVA")) {
@@ -71,16 +71,15 @@ public class ConfigController implements Initializable {
                 configComboBox.getSelectionModel().selectIndex(4);
             }
         }
-        System.out.println("after config init");
-        Config.display();
+
         runButton.setOnAction(actionEvent -> {
             try {
                 if (compilerPath.getText().isBlank() ||
-                    assignmentPath.getText().isBlank() ||
-                    args.getText().isBlank() ||
-                    runField.getText().isBlank() ||
-                    expected.getText().isBlank()) {
-                    throw new Exception("all fields must be filled");
+                        assignmentPath.getText().isBlank() ||
+                        args.getText().isBlank() ||
+                        (runField.getText().isBlank() && runField.isVisible()) ||
+                        expected.getText().isBlank()) {
+                    throw new Exception("All fields must be filled");
                 }
                 Config.getInstance().COMPILER_PATH = compilerPath.getText();
                 Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
@@ -91,7 +90,6 @@ public class ConfigController implements Initializable {
                 zipExtractor.extract(Config.getInstance().ASSIGNMENT_PATH);
 
                 if (zipExtractor.getZipExists()) {
-                    
                     Application.changeScene("fxml/results.fxml", 600, 420);
                 } else {
                     Application.createAlert("Assignment path does not contain any zip files.", "Error");
@@ -107,6 +105,9 @@ public class ConfigController implements Initializable {
         assignmentChooser.setOnAction(actionEvent -> {
             try {
                 importConfig(selectedDirectoryPath, comboList);
+                if (assignmentPath != null) {
+                    Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
+                }
             } catch (SQLException throwables) {
                 throwables.printStackTrace();
             }
@@ -188,7 +189,6 @@ public class ConfigController implements Initializable {
             File file = new File(directory, "config.assignit");
 
             if (file.exists()) {
-                System.out.println("File exists.");
 
                 // TODO: use switch and get rid of duplicate code
                 Database.getInstance().connect(selectedDirectoryPath + "/config.assignit");
@@ -198,22 +198,31 @@ public class ConfigController implements Initializable {
                 String COMPILER_PATH = config.COMPILER_PATH;
                 String ARGS = config.ARGS;
                 String RUN_COMMAND = config.RUN_COMMAND;
-                System.out.println("after import");
-                Config.display();
+
                 Database.getInstance().disconnect();
-                if (SELECTED_LANGUAGE.toString().equals("C")) {
-                    configComboBox.getSelectionModel().selectIndex(1);
-                } else if (SELECTED_LANGUAGE.toString().equals("JAVA")) {
-                    configComboBox.getSelectionModel().selectIndex(5);
-                } else if (SELECTED_LANGUAGE.toString().equals("HASKELL")) {
-                    configComboBox.getSelectionModel().selectIndex(6);
-                } else if (SELECTED_LANGUAGE.toString().equals("PYTHON")) {
-                    configComboBox.getSelectionModel().selectIndex(2);
-                } else if (SELECTED_LANGUAGE.toString().equals("LISP")) {
-                    configComboBox.getSelectionModel().selectIndex(3);
-                } else if (SELECTED_LANGUAGE.toString().equals("SCHEME")) {
-                    configComboBox.getSelectionModel().selectIndex(4);
+                switch (SELECTED_LANGUAGE.toString()) {
+                    case "C":
+                        configComboBox.getSelectionModel().selectIndex(1);
+                        break;
+                    case "JAVA":
+                        configComboBox.getSelectionModel().selectIndex(5);
+                        break;
+                    case "HASKELL":
+                        configComboBox.getSelectionModel().selectIndex(6);
+                        break;
+                    case "PYTHON":
+                        configComboBox.getSelectionModel().selectIndex(2);
+                        break;
+                    case "LISP":
+                        configComboBox.getSelectionModel().selectIndex(3);
+                        break;
+                    case "SCHEME":
+                        configComboBox.getSelectionModel().selectIndex(4);
+                        break;
+                    default:
+                        configComboBox.getSelectionModel().selectIndex(0);
                 }
+
                 config.SELECTED_LANGUAGE = SELECTED_LANGUAGE;
                 config.COMPILER_PATH = COMPILER_PATH;
                 config.ARGS = ARGS;
@@ -224,14 +233,9 @@ public class ConfigController implements Initializable {
                 } else {
                     fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, false, "");
                 }
-                
-            } else {
-                System.out.println("File does not exist.");
-            }
-        } else {
-            System.out.println("selectedDirectory is null");
-        }
 
+            }
+        }
     }
 
     private void exportConfig(StringBuilder selectedDirectoryPath) {

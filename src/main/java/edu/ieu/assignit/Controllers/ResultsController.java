@@ -1,41 +1,33 @@
 package edu.ieu.assignit.Controllers;
 
 import edu.ieu.assignit.Application;
-import edu.ieu.assignit.Compilers.*;
 import edu.ieu.assignit.Compilers.Compiler;
+import edu.ieu.assignit.Compilers.*;
 import edu.ieu.assignit.Config;
 import edu.ieu.assignit.Result;
 import io.github.palexdev.materialfx.controls.MFXButton;
 import io.github.palexdev.materialfx.controls.MFXTableColumn;
-import io.github.palexdev.materialfx.controls.MFXTableRow;
 import io.github.palexdev.materialfx.controls.MFXTableView;
 import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
 import io.github.palexdev.materialfx.filter.IntegerFilter;
 import io.github.palexdev.materialfx.filter.StringFilter;
-import javafx.beans.Observable;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.*;
-import javafx.scene.control.Alert;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.ScrollPane;
-
-import javafx.beans.value.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
-import java.util.*;
-import java.io.*;
-import edu.ieu.assignit.Controllers.*;
-
-import static edu.ieu.assignit.Application.primaryStage;
+import java.util.Comparator;
+import java.util.ResourceBundle;
+import java.util.Scanner;
 
 public class ResultsController implements Initializable {
+    private final ObservableList<Submission> submissions = FXCollections.observableArrayList();
     @FXML
     private MFXTableView<Submission> table;
     @FXML
@@ -44,21 +36,18 @@ public class ResultsController implements Initializable {
     private MFXButton detailsButton;
     @FXML
     private MFXButton recompileButton;
-    private final ObservableList<Submission> submissions = FXCollections.observableArrayList();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         File f = new File(Config.getInstance().ASSIGNMENT_PATH + "/results.txt");
         if (f.exists()) {
-             importResultsFromFile(f);
-             setupTable();
-            System.out.println("exits");
+            importResultsFromFile(f);
+            setupTable();
         } else {
             try {
                 File[] submissions = new File(Config.getInstance().ASSIGNMENT_PATH).listFiles();
                 for (File file : submissions) {
                     if (!file.isFile()) { // if it is a directory
-                        System.out.println(file.getName() + " is working directory for compiling");
                         Compiler compiler;
                         switch (Config.getInstance().SELECTED_LANGUAGE) {
                             case C:
@@ -92,11 +81,7 @@ public class ResultsController implements Initializable {
                         } else {
                             result = compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
                         }
-                        System.out.println(Config.getInstance().COMPILER_PATH + " " + Config.getInstance().ARGS);
-                        System.out.println("status: " + result.getStatus());
-                        System.out.println("output: " + result.getOutput());
-                        System.out.println("error: " + result.getError());
-                        System.out.println("expected: " + Config.getInstance().EXPECTED);
+
                         // check results
                         String isError;
                         String resultString;
@@ -138,6 +123,7 @@ public class ResultsController implements Initializable {
             //TODO: Recompile
         });
     }
+
     private void importResultsFromFile(File file) {
         try (Scanner scanner = new Scanner(file)) {
             StringBuilder submissionBr = new StringBuilder();
