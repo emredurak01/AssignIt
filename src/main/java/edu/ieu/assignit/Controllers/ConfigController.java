@@ -75,22 +75,29 @@ public class ConfigController implements Initializable {
         Config.display();
         runButton.setOnAction(actionEvent -> {
             try {
+                if (compilerPath.getText().isBlank() ||
+                    assignmentPath.getText().isBlank() ||
+                    args.getText().isBlank() ||
+                    runField.getText().isBlank() ||
+                    expected.getText().isBlank()) {
+                    throw new Exception("all fields must be filled");
+                }
                 Config.getInstance().COMPILER_PATH = compilerPath.getText();
                 Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
                 Config.getInstance().ARGS = args.getText();
                 Config.getInstance().RUN_COMMAND = runField.getText();
                 Config.getInstance().EXPECTED = expected.getText();
-
                 ZipExtractor zipExtractor = new ZipExtractor();
                 zipExtractor.extract(Config.getInstance().ASSIGNMENT_PATH);
 
                 if (zipExtractor.getZipExists()) {
+                    
                     Application.changeScene("fxml/results.fxml", 600, 420);
                 } else {
                     Application.createAlert("Assignment path does not contain any zip files.", "Error");
                 }
 
-            } catch (IOException e) {
+            } catch (Exception e) {
                 Application.createAlert(e.getMessage(), "Error");
             }
         });
