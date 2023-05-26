@@ -213,9 +213,9 @@ public class ConfigController implements Initializable {
                 config.RUN_COMMAND = RUN_COMMAND;
                 final Set<String> LANGUAGE_WITH_RUN = new HashSet<>(Arrays.asList("C", "JAVA", "HASKELL"));
                 if (LANGUAGE_WITH_RUN.contains(config.SELECTED_LANGUAGE.toString())) {
-                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, true, "");
+                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, true, RUN_COMMAND);
                 } else {
-                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, false, RUN_COMMAND);
+                    fillTextFields(selectedDirectoryPath.toString(), COMPILER_PATH, ARGS, false, "");
                 }
                 
             } else {
