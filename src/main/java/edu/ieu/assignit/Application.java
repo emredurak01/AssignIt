@@ -49,9 +49,13 @@ public class Application extends javafx.application.Application {
         MFXThemeManager.addOn(scene, Themes.DEFAULT, Themes.LEGACY);
         scene.setFill(Color.TRANSPARENT);
         primaryStage.setScene(scene);
-        primaryStage.setTitle("AssignIt");
+
+       primaryStage.setTitle("AssignIt");
         primaryStage.setWidth(250);
         primaryStage.setHeight(250);
         primaryStage.show();
+    }
+    public static void main(String[] args) {
+        launch(args);
     }
 }
