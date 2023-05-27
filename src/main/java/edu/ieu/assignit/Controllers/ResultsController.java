@@ -39,6 +39,28 @@ public class ResultsController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        compile();
+
+        backButton.setOnAction(actionEvent -> {
+                try {
+                    Application.changeScene("fxml/config.fxml",
+                                            300,
+                                            560);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+
+        recompileButton.setOnAction(actionEvent -> {
+                File f = new File(Config.getInstance().ASSIGNMENT_PATH + "/results.txt");
+                    if (f.delete()) {
+                        
+                    compile();
+                    }
+            });
+    }
+    private void compile() {
+        submissions.clear();
         File f = new File(Config.getInstance().ASSIGNMENT_PATH + "/results.txt");
         if (f.exists()) {
             importResultsFromFile(f);
@@ -50,32 +72,32 @@ public class ResultsController implements Initializable {
                     if (!file.isFile()) { // if it is a directory
                         Compiler compiler;
                         switch (Config.getInstance().SELECTED_LANGUAGE) {
-                            case C:
-                                compiler = new CCompiler(file);
-                                break;
-                            case PYTHON:
-                                compiler = new PythonCompiler(file);
-                                break;
-                            case LISP:
-                                compiler = new LispCompiler(file);
-                                break;
-                            case HASKELL:
-                                compiler = new HaskellCompiler(file);
-                                break;
-                            case SCHEME:
-                                compiler = new SchemeCompiler(file);
-                                break;
-                            case JAVA:
-                                compiler = new JavaCompiler(file);
-                                break;
-                            default:
-                                compiler = new CCompiler(file);
-                                break;
+                        case C:
+                            compiler = new CCompiler(file);
+                            break;
+                        case PYTHON:
+                            compiler = new PythonCompiler(file);
+                            break;
+                        case LISP:
+                            compiler = new LispCompiler(file);
+                            break;
+                        case HASKELL:
+                            compiler = new HaskellCompiler(file);
+                            break;
+                        case SCHEME:
+                            compiler = new SchemeCompiler(file);
+                            break;
+                        case JAVA:
+                            compiler = new JavaCompiler(file);
+                            break;
+                        default:
+                            compiler = new CCompiler(file);
+                            break;
                         }
                         Result result;
                         if (compiler instanceof JavaCompiler ||
-                                compiler instanceof HaskellCompiler ||
-                                compiler instanceof CCompiler) {
+                            compiler instanceof HaskellCompiler ||
+                            compiler instanceof CCompiler) {
                             compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
                             result = compiler.run(Config.getInstance().RUN_COMMAND);
                         } else {
@@ -99,31 +121,17 @@ public class ResultsController implements Initializable {
                         }
                         Submission submission = new Submission(file.getName(), result.getOutput(), resultString, result.getStatus(), isError, Config.getInstance().EXPECTED);
                         this.submissions.add(submission);
+                        exportTableToFile(f);
+                        setupTable();
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 Application.createAlert(e.getMessage(), "Error");
             }
-            exportTableToFile(f);
-            setupTable();
+            
         }
-
-        backButton.setOnAction(actionEvent -> {
-            try {
-                Application.changeScene("fxml/config.fxml",
-                        300,
-                        560);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        recompileButton.setOnAction(actionEvent -> {
-            //TODO: Recompile
-        });
     }
-
     private void importResultsFromFile(File file) {
         try (Scanner scanner = new Scanner(file)) {
             StringBuilder submissionBr = new StringBuilder();
@@ -158,8 +166,8 @@ public class ResultsController implements Initializable {
         try (PrintWriter writer = new PrintWriter(file)) {
             for (Submission submission : submissions) {
                 writer.println(submission.getId() + "," + submission.getOutput() + "," +
-                        submission.getResult() + "," + submission.getStatus() + "," +
-                        submission.getError() + "," + submission.getExpectedValue() + "$"); // $ indicates the submission's end position
+                               submission.getResult() + "," + submission.getStatus() + "," +
+                               submission.getError() + "," + submission.getExpectedValue() + "$"); // $ indicates the submission's end position
             }
             // success
         } catch (IOException e) {
@@ -185,13 +193,13 @@ public class ResultsController implements Initializable {
         table.setItems(submissions);
 
         table.getFilters().addAll(
-                new StringFilter<>("ID", Submission::getId),
-                new StringFilter<>("Output", Submission::getOutput), //details
-                new StringFilter<>("Expected Value", Submission::getExpectedValue),
-                new StringFilter<>("Result", Submission::getResult),
-                new IntegerFilter<>("Status", Submission::getStatus),
-                new StringFilter<>("Error", Submission::getError) //details
-        );
+                                  new StringFilter<>("ID", Submission::getId),
+                                  new StringFilter<>("Output", Submission::getOutput), //details
+                                  new StringFilter<>("Expected Value", Submission::getExpectedValue),
+                                  new StringFilter<>("Result", Submission::getResult),
+                                  new IntegerFilter<>("Status", Submission::getStatus),
+                                  new StringFilter<>("Error", Submission::getError) //details
+                                  );
 
         detailsButton.setOnAction(actionEvent -> handleRowSelection());
     }
@@ -204,9 +212,9 @@ public class ResultsController implements Initializable {
             Submission selectedSubmission = submissionsList.iterator().next();
 
             Application.createAlert("Output: \n" + selectedSubmission.getOutput() + "\n" +
-                    "Status: " + selectedSubmission.getStatus() + "\n" +
-                    "Expected Value: " + selectedSubmission.getExpectedValue() + "\n" +
-                    (selectedSubmission.getError().isEmpty() ? "" : "Error: \n" + selectedSubmission.getError()), "Submission Details");
+                                    "Status: " + selectedSubmission.getStatus() + "\n" +
+                                    "Expected Value: " + selectedSubmission.getExpectedValue() + "\n" +
+                                    (selectedSubmission.getError().isEmpty() ? "" : "Error: \n" + selectedSubmission.getError()), "Submission Details");
 
         }
     }
