@@ -1,31 +1,19 @@
 package edu.ieu.assignit.Controllers;
-
 import edu.ieu.assignit.Application;
+
+// to avoid the class ambiguity
+
 import edu.ieu.assignit.Compilers.Compiler;
 import edu.ieu.assignit.Compilers.*;
-import edu.ieu.assignit.Config;
-import edu.ieu.assignit.Result;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXTableColumn;
-import io.github.palexdev.materialfx.controls.MFXTableView;
-import io.github.palexdev.materialfx.controls.cell.MFXTableRowCell;
-import io.github.palexdev.materialfx.filter.IntegerFilter;
-import io.github.palexdev.materialfx.filter.StringFilter;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.collections.ObservableMap;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.PrintWriter;
-import java.net.URL;
-import java.util.Comparator;
-import java.util.ResourceBundle;
-import java.util.Scanner;
-
+import edu.ieu.assignit.*;
+import io.github.palexdev.materialfx.controls.*;
+import io.github.palexdev.materialfx.controls.cell.*;
+import io.github.palexdev.materialfx.filter.*;
+import javafx.collections.*;
+import javafx.fxml.*;
+import java.io.*;
+import java.net.*;
+import java.util.*;
 public class ResultsController implements Initializable {
     private final ObservableList<Submission> submissions = FXCollections.observableArrayList();
     @FXML
@@ -52,15 +40,25 @@ public class ResultsController implements Initializable {
             });
 
         recompileButton.setOnAction(actionEvent -> {
+                table.getTableColumns().clear();
+                submissions.clear();
                 File f = new File(Config.getInstance().ASSIGNMENT_PATH + "/results.txt");
+                if (f.exists()) {
                     if (f.delete()) {
-                        
-                    compile();
+                        compile();
                     }
+                } else {
+                    compile();
+                }
             });
     }
     private void compile() {
-        submissions.clear();
+        ZipExtractor zipExtractor = new ZipExtractor();
+        zipExtractor.extract(Config.getInstance().ASSIGNMENT_PATH);
+        if (!zipExtractor.getZipExists()) {
+            // doing nothing is more appropriate than creating alert i guess
+            Application.createAlert("Assignment path does not contain any submision zip files. However, if there are extracted files, they will be compiled / interpreted to be shown on the table.", "Warning");
+        }
         File f = new File(Config.getInstance().ASSIGNMENT_PATH + "/results.txt");
         if (f.exists()) {
             importResultsFromFile(f);

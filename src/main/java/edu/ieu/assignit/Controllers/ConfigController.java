@@ -1,21 +1,19 @@
 package edu.ieu.assignit.Controllers;
 
 import edu.ieu.assignit.*;
-import edu.ieu.assignit.Compilers.*;
-import io.github.palexdev.materialfx.controls.MFXButton;
-import io.github.palexdev.materialfx.controls.MFXComboBox;
-import io.github.palexdev.materialfx.controls.MFXTextField;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.stage.DirectoryChooser;
 
-import java.io.File;
-import java.net.URL;
-import java.sql.SQLException;
+// to avoid the class ambiguity
+
+import edu.ieu.assignit.Compilers.*;
+import io.github.palexdev.materialfx.controls.*;
+import javafx.beans.value.*;
+import javafx.collections.*;
+import javafx.fxml.*;
+import javafx.stage.*;;
+
+import java.io.*;
+import java.net.*;
+import java.sql.*;
 import java.util.*;
 
 import static edu.ieu.assignit.Application.primaryStage;
@@ -73,92 +71,92 @@ public class ConfigController implements Initializable {
         }
 
         runButton.setOnAction(actionEvent -> {
-            try {
-                if (compilerPath.getText().isBlank() ||
+                try {
+                    // the null check may be not necessary for all fields, but we are guaranteeing the correct behaviour
+                    if (compilerPath.getText() == null ||
+                        args.getText() == null ||
+                        assignmentPath.getText() == null ||
+                        expected.getText() == null ||
+                        (runField.isVisible() && runField.getText() == null) ||
+                        compilerPath.getText().isBlank() ||
                         assignmentPath.getText().isBlank() ||
                         args.getText().isBlank() ||
                         (runField.getText().isBlank() && runField.isVisible()) ||
                         expected.getText().isBlank()) {
-                    throw new Exception("All fields must be filled");
-                }
-                Config.getInstance().COMPILER_PATH = compilerPath.getText();
-                Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
-                Config.getInstance().ARGS = args.getText();
-                Config.getInstance().RUN_COMMAND = runField.getText();
-                Config.getInstance().EXPECTED = expected.getText();
-                ZipExtractor zipExtractor = new ZipExtractor();
-                zipExtractor.extract(Config.getInstance().ASSIGNMENT_PATH);
-
-                if (zipExtractor.getZipExists()) {
+                        throw new Exception("All fields must be filled");
+                    }
+                    Config.getInstance().COMPILER_PATH = compilerPath.getText();
+                    Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
+                    Config.getInstance().ARGS = args.getText();
+                    Config.getInstance().RUN_COMMAND = runField.getText();
+                    Config.getInstance().EXPECTED = expected.getText();
                     Application.changeScene("fxml/results.fxml", 600, 420);
-                } else {
-                    Application.createAlert("Assignment path does not contain any zip files.", "Error");
-                }
 
-            } catch (Exception e) {
-                Application.createAlert(e.getMessage(), "Error");
-            }
-        });
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Application.createAlert(e.getMessage(), "Error");
+                }
+            });
 
         StringBuilder selectedDirectoryPath = new StringBuilder(); // it is indicating the selected directory name
         // I used StringBuilder because it is effectively final so it can be used in lambdas, unlike String
         assignmentChooser.setOnAction(actionEvent -> {
-            try {
-                importConfig(selectedDirectoryPath, comboList);
-                if (assignmentPath != null) {
-                    Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
+                try {
+                    importConfig(selectedDirectoryPath, comboList);
+                    if (assignmentPath != null) {
+                        Config.getInstance().ASSIGNMENT_PATH = assignmentPath.getText();
+                    }
+                } catch (SQLException throwables) {
+                    throwables.printStackTrace();
                 }
-            } catch (SQLException throwables) {
-                throwables.printStackTrace();
-            }
-        });
+            });
 
         saveButton.setOnAction(actionEvent -> exportConfig(selectedDirectoryPath));
         configComboBox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
-                String comboBoxValue = configComboBox.getValue();
-                String directoryString = Config.getInstance().ASSIGNMENT_PATH;
-                if (comboBoxValue == null) {
-                } else if (comboBoxValue.equals("Generic")) {
-                    Config.getInstance().SELECTED_LANGUAGE = Language.GENERIC;
-                    fillTextFields(directoryString, "", "", true, "");
-                } else if (comboBoxValue.equals("C")) {
-                    Config.getInstance().SELECTED_LANGUAGE = Language.C;
-                    fillTextFields(directoryString, CCompiler.COMPILER_PATH, CCompiler.ARGS, true, CCompiler.RUN_COMMAND);
-                } else if (comboBoxValue.equals("Python")) {
-                    Config.getInstance().SELECTED_LANGUAGE = Language.PYTHON;
-                    fillTextFields(directoryString, PythonCompiler.COMPILER_PATH, PythonCompiler.ARGS, false, "");
-                } else if (comboBoxValue.equals("Emacs Lisp")) {
-                    Config.getInstance().SELECTED_LANGUAGE = Language.LISP;
-                    fillTextFields(directoryString, LispCompiler.COMPILER_PATH, LispCompiler.ARGS, false, "");
-                } else if (comboBoxValue.equals("Scheme")) {
-                    Config.getInstance().SELECTED_LANGUAGE = Language.SCHEME;
-                    fillTextFields(directoryString, SchemeCompiler.COMPILER_PATH, SchemeCompiler.ARGS, false, "");
-                } else if (comboBoxValue.equals("Java")) {
-                    Config.getInstance().SELECTED_LANGUAGE = Language.JAVA;
-                    fillTextFields(directoryString, JavaCompiler.COMPILER_PATH, JavaCompiler.ARGS, true, JavaCompiler.RUN_COMMAND);
-                } else if (comboBoxValue.equals("Haskell")) {
-                    Config.getInstance().SELECTED_LANGUAGE = Language.HASKELL;
-                    fillTextFields(directoryString, HaskellCompiler.COMPILER_PATH, HaskellCompiler.ARGS, true, HaskellCompiler.RUN_COMMAND);
+                @Override
+                public void changed(ObservableValue<? extends String> observableValue, String s, String t1) {
+                    String comboBoxValue = configComboBox.getValue();
+                    String directoryString = Config.getInstance().ASSIGNMENT_PATH;
+                    if (comboBoxValue == null) {
+                    } else if (comboBoxValue.equals("Generic")) {
+                        Config.getInstance().SELECTED_LANGUAGE = Language.GENERIC;
+                        fillTextFields(directoryString, "", "", true, "");
+                    } else if (comboBoxValue.equals("C")) {
+                        Config.getInstance().SELECTED_LANGUAGE = Language.C;
+                        fillTextFields(directoryString, CCompiler.COMPILER_PATH, CCompiler.ARGS, true, CCompiler.RUN_COMMAND);
+                    } else if (comboBoxValue.equals("Python")) {
+                        Config.getInstance().SELECTED_LANGUAGE = Language.PYTHON;
+                        fillTextFields(directoryString, PythonCompiler.COMPILER_PATH, PythonCompiler.ARGS, false, "");
+                    } else if (comboBoxValue.equals("Emacs Lisp")) {
+                        Config.getInstance().SELECTED_LANGUAGE = Language.LISP;
+                        fillTextFields(directoryString, LispCompiler.COMPILER_PATH, LispCompiler.ARGS, false, "");
+                    } else if (comboBoxValue.equals("Scheme")) {
+                        Config.getInstance().SELECTED_LANGUAGE = Language.SCHEME;
+                        fillTextFields(directoryString, SchemeCompiler.COMPILER_PATH, SchemeCompiler.ARGS, false, "");
+                    } else if (comboBoxValue.equals("Java")) {
+                        Config.getInstance().SELECTED_LANGUAGE = Language.JAVA;
+                        fillTextFields(directoryString, JavaCompiler.COMPILER_PATH, JavaCompiler.ARGS, true, JavaCompiler.RUN_COMMAND);
+                    } else if (comboBoxValue.equals("Haskell")) {
+                        Config.getInstance().SELECTED_LANGUAGE = Language.HASKELL;
+                        fillTextFields(directoryString, HaskellCompiler.COMPILER_PATH, HaskellCompiler.ARGS, true, HaskellCompiler.RUN_COMMAND);
+                    }
                 }
-            }
-        });
+            });
 
         deleteButton.setOnAction(actionEvent -> {
-            String filePath = selectedDirectoryPath + File.separator + "config.assignit";
-            File file = new File(filePath);
-            if (file.exists()) {
-                boolean deleted = file.delete();
-                if (deleted) {
-                    Application.createAlert("Configuration deleted successfully.", "Success");
+                String filePath = selectedDirectoryPath + File.separator + "config.assignit";
+                File file = new File(filePath);
+                if (file.exists()) {
+                    boolean deleted = file.delete();
+                    if (deleted) {
+                        Application.createAlert("Configuration deleted successfully.", "Success");
+                    } else {
+                        Application.createAlert("Failed to delete the configuration.", "Error");
+                    }
                 } else {
-                    Application.createAlert("Failed to delete the configuration.", "Error");
+                    Application.createAlert("Configuration could not be found.", "Error");
                 }
-            } else {
-                Application.createAlert("Configuration could not be found.", "Error");
-            }
-        });
+            });
 
     }
 
@@ -189,8 +187,6 @@ public class ConfigController implements Initializable {
             File file = new File(directory, "config.assignit");
 
             if (file.exists()) {
-
-                // TODO: use switch and get rid of duplicate code
                 Database.getInstance().connect(selectedDirectoryPath + "/config.assignit");
                 Config config = Database.getInstance().getConfig();
                 Language SELECTED_LANGUAGE = config.SELECTED_LANGUAGE;
@@ -201,26 +197,26 @@ public class ConfigController implements Initializable {
 
                 Database.getInstance().disconnect();
                 switch (SELECTED_LANGUAGE.toString()) {
-                    case "C":
-                        configComboBox.getSelectionModel().selectIndex(1);
-                        break;
-                    case "JAVA":
-                        configComboBox.getSelectionModel().selectIndex(5);
-                        break;
-                    case "HASKELL":
-                        configComboBox.getSelectionModel().selectIndex(6);
-                        break;
-                    case "PYTHON":
-                        configComboBox.getSelectionModel().selectIndex(2);
-                        break;
-                    case "LISP":
-                        configComboBox.getSelectionModel().selectIndex(3);
-                        break;
-                    case "SCHEME":
-                        configComboBox.getSelectionModel().selectIndex(4);
-                        break;
-                    default:
-                        configComboBox.getSelectionModel().selectIndex(0);
+                case "C":
+                    configComboBox.getSelectionModel().selectIndex(1);
+                    break;
+                case "JAVA":
+                    configComboBox.getSelectionModel().selectIndex(5);
+                    break;
+                case "HASKELL":
+                    configComboBox.getSelectionModel().selectIndex(6);
+                    break;
+                case "PYTHON":
+                    configComboBox.getSelectionModel().selectIndex(2);
+                    break;
+                case "LISP":
+                    configComboBox.getSelectionModel().selectIndex(3);
+                    break;
+                case "SCHEME":
+                    configComboBox.getSelectionModel().selectIndex(4);
+                    break;
+                default:
+                    configComboBox.getSelectionModel().selectIndex(0);
                 }
 
                 config.SELECTED_LANGUAGE = SELECTED_LANGUAGE;
