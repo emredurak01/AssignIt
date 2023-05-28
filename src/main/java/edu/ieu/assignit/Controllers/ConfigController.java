@@ -197,10 +197,9 @@ public class ConfigController implements Initializable {
         args.setText(argsParam);
         runField.setVisible(runFieldBool);
         runField.setManaged(runFieldBool);
-        runFieldArgs.setVisible(runFieldBool);
-        runFieldArgs.setManaged(runFieldBool);
-        runChooser.setVisible(runFieldBool);
-        runChooser.setManaged(runFieldBool);
+
+        runChooser.getParent().setVisible(runFieldBool);
+        runChooser.getParent().setManaged(runFieldBool);
         runField.setText(runFieldParam);
         expected.setText(Config.getInstance().EXPECTED);
     }
