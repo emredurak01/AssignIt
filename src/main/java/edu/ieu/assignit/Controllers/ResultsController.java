@@ -97,7 +97,7 @@ public class ResultsController implements Initializable {
                             compiler instanceof HaskellCompiler ||
                             compiler instanceof CCompiler) {
                             compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
-                            result = compiler.run(Config.getInstance().RUN_COMMAND);
+                            result = compiler.run(Config.getInstance().RUN_COMMAND, Config.getInstance().RUN_ARGS);
                         } else {
                             result = compiler.compile(Config.getInstance().COMPILER_PATH, Config.getInstance().ARGS);
                         }

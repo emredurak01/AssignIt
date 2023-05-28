@@ -8,6 +8,7 @@ public class Config {
     public String ARGS;
     public String RUN_COMMAND;
     public String EXPECTED;
+    public String RUN_ARGS;
 
     private Config() {
     }

@@ -51,7 +51,6 @@ public class ConfigController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
         ObservableList<String> comboList = FXCollections.observableArrayList();
         comboList.addAll("Generic", "C", "Python", "Emacs Lisp", "Scheme", "Java", "Haskell");
         configComboBox.setItems(comboList);
@@ -78,7 +77,6 @@ public class ConfigController implements Initializable {
                 configComboBox.getSelectionModel().selectIndex(4);
             }
         }
-
         runButton.setOnAction(actionEvent -> {
                 try {
                     // the null check may be not necessary for all fields, but we are guaranteeing the correct behaviour
@@ -99,8 +97,8 @@ public class ConfigController implements Initializable {
                     Config.getInstance().ARGS = args.getText();
                     Config.getInstance().RUN_COMMAND = runField.getText();
                     Config.getInstance().EXPECTED = expected.getText();
+                    Config.getInstance().RUN_ARGS = runFieldArgs.getText();
                     Application.changeScene("fxml/results.fxml", 600, 420);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                     Application.createAlert(e.getMessage(), "Error");
@@ -119,11 +117,9 @@ public class ConfigController implements Initializable {
                     throwables.printStackTrace();
                 }
             });
-
         runChooser.setOnAction(actionEvent -> {
             FileChooser fileChooser = new FileChooser();
             File selectedFile = fileChooser.showOpenDialog(primaryStage);
-
             if (selectedFile != null) {
                 try {
                     String content = Files.readString(selectedFile.toPath());
@@ -194,24 +190,23 @@ public class ConfigController implements Initializable {
                     Application.createAlert("Configuration could not be found.", "Error");
                 }
             });
-
     }
-
     private void fillTextFields(String assignmentPathParam, String compilerPathParam, String argsParam, boolean runFieldBool, String runFieldParam) {
         assignmentPath.setText(Objects.requireNonNullElse(assignmentPathParam, ""));
         compilerPath.setText(compilerPathParam);
         args.setText(argsParam);
         runField.setVisible(runFieldBool);
         runField.setManaged(runFieldBool);
+        runFieldArgs.setVisible(runFieldBool);
+        runFieldArgs.setManaged(runFieldBool);
+        runChooser.setVisible(runFieldBool);
+        runChooser.setManaged(runFieldBool);
         runField.setText(runFieldParam);
         expected.setText(Config.getInstance().EXPECTED);
     }
-
     private void importConfig(StringBuilder selectedDirectoryPath, ObservableList<String> comboList) throws SQLException {
-
         DirectoryChooser directoryChooser = new DirectoryChooser();
         File selectedDirectory = directoryChooser.showDialog(primaryStage);
-
         if (selectedDirectory != null) {
             String directoryPath = selectedDirectory.getPath();
             assignmentPath.setText(directoryPath);
