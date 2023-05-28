@@ -33,7 +33,7 @@ public class ResultsController implements Initializable {
                 try {
                     Application.changeScene("fxml/config.fxml",
                                             300,
-                                            560);
+                                            650);
                 } catch (IOException e) {
                     throw new RuntimeException(e);
                 }

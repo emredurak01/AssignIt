@@ -13,6 +13,7 @@ import javafx.stage.*;;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Files;
 import java.sql.*;
 import java.util.*;
 
@@ -39,6 +40,14 @@ public class ConfigController implements Initializable {
     private MFXButton deleteButton;
     @FXML
     private MFXButton runButton;
+    @FXML
+    private MFXButton runChooser;
+    @FXML
+    private MFXButton expectedChooser;
+    @FXML
+    private MFXTextField runFieldArgs;
+
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -110,6 +119,34 @@ public class ConfigController implements Initializable {
                     throwables.printStackTrace();
                 }
             });
+
+        runChooser.setOnAction(actionEvent -> {
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+
+            if (selectedFile != null) {
+                try {
+                    String content = Files.readString(selectedFile.toPath());
+                    runFieldArgs.setText(content);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        expectedChooser.setOnAction(actionEvent -> {
+            FileChooser fileChooser = new FileChooser();
+            File selectedFile = fileChooser.showOpenDialog(primaryStage);
+
+            if (selectedFile != null) {
+                try {
+                    String content = Files.readString(selectedFile.toPath());
+                    expected.setText(content);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         saveButton.setOnAction(actionEvent -> exportConfig(selectedDirectoryPath));
         configComboBox.valueProperty().addListener(new ChangeListener<String>() {
