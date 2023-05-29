@@ -1,2 +1,12 @@
 * AssignIt
 https://github.com/emredurak01/AssignIt/wiki
+** How to Run
+Ensure that Maven is in PATH and the current working directory is the project directory containing the pom.xml file. To install it on GNU/Linux Debian, type:
+#+BEGIN_SRC shell
+sudo apt install maven
+#+END_SRC
+To run the software, type:
+
+#+BEGIN_SRC shell
+mvn javafx:run
+#+END_SRC
