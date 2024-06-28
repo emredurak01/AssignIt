@@ -1,5 +1,10 @@
-* AssignIt
+* Welcome to AssignIt!
+AssignIt is a lightweight integrated assignment environment (IAE) for managing programming assignments. Consider a scenario where a lecturer is tasked with managing a programming course that involves a significant number of scholars. The lecturer assigns various programming tasks to the students, each requiring different tools and configurations, which can be an arduous and time-consuming process, especially when dealing with a large number of scholars. This is where the Integrated Assignment Environment (IAE) comes in, a lightweight tool specifically designed to manage programming assignments efficiently and seamlessly. In AssignIt, the user can compile the program, run the executable parameters, check if the output is correct and report if the assignment result is correct or not.
+
+** How to Use
+Please refer to the wiki:
 https://github.com/emredurak01/AssignIt/wiki
+
 ** How to Clone
 Ensure that git is in PATH.
 To install it on GNU/Linux Debian, type:
